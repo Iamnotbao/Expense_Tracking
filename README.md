@@ -1,11 +1,14 @@
-first go into each folder:
+First go into each folder:
 *Front-end site
+
++Client page
 -> cd front-end
 -> cd client
 ->npm i
 ->npm run dev
 -> choose the link to open client page
-do the same with admin
+
++Admin page
 -> cd admin
 ->npm i
 ->npm run dev
