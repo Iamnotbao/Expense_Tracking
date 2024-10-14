@@ -17,3 +17,6 @@ First go into each folder:
 -> cd back-end
 -> set up with connection string
 -> download mongoDB Compass
+
+
+Use Case ![CSE305](https://github.com/user-attachments/assets/e940c80f-6e28-432b-8dbe-541eb53379db)
