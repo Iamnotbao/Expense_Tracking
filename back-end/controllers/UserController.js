@@ -1,12 +1,12 @@
 
-const User = require("../models/userModel")
+const User = require("../models/users.js")
 
 const getAllUser = async (req,res) => {
     
     console.log("checks",req.body)
     let user;
     try {
-       user = User.find({}).exec()
+       user = await User.find({}).exec()
       if(user){
         res.status(200).json({
             message:true,
