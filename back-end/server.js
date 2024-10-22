@@ -6,11 +6,9 @@ const app = express();
 
 database();
 
-let port = process.env.PORT;
 
 
-
-app.listen(port,()=>console.log(`Server listen at port ${port}`));
+app.listen(5000,()=>console.log("Server listen at port 5000"));
 
 
 
