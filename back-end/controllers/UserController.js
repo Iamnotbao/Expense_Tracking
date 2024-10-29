@@ -13,7 +13,6 @@ const getAllUser = async (req, res) => {
       })
     } else {
       console.log(" user not data");
-
     }
 
 
@@ -28,8 +27,6 @@ const registeredUser= async(req,res)=>{
   const {username,password,email,phone, address} = req.body;
   console.log(username+" "+password);
   const userExist = await User.findOne({username:username});
-  
-  
 try {
   if(!userExist){
     const hashPassword = await HashPassword(password);
