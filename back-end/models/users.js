@@ -17,7 +17,19 @@ const userSchema = new mongoose.Schema({
     role_id:{
         type:Number,
         default:0
-    }
+    },
+    balance: Number,
+    //listHistory: 
+    listIncome: [{
+        income: {
+            type:mongoose.Schema.ObjectId,
+            ref :"incomes",
+            require: true,
+        }
+
+    }]
+    ,
+
 })
 
 const User = mongoose.model("users", userSchema);
