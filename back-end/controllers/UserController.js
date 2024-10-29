@@ -43,9 +43,10 @@ try {
       create_at:new Date(),
       create_by:username,
       update_at:null,
-      update_by:username,
+      update_by:username
     })
     console.log("this user is create",user);
+    await user.save();
   }else{
     return res.status(401).json({
       success:false,
@@ -53,8 +54,6 @@ try {
     })
   }
 
-  
-  
 } catch (error) {
   
 }
@@ -75,6 +74,12 @@ const loginUser = async (req, res) => {
     })
   }
 }
+
+
+
+
+
+
 module.exports = {
   getAllUser,
   loginUser,
