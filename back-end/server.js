@@ -2,6 +2,7 @@
 const {database} = require("./config/db");
 const express = require("express");
 const { getAllUser, loginUser, registeredUser } = require("./controllers/UserController");
+const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const app = express();
@@ -23,6 +24,16 @@ app.get("/users",getAllUser);
 app.post("/signin",loginUser);
 
 app.post("/signup",registeredUser);
+
+
+// expense part
+//get all expenses
+app.get("/expense",findAllExpense);
+//get expenses by User Id
+app.get('/expense/:id',findExpenseByUserId);
+//add expense
+app.post("/expense/add",addExpense);
+
 
 
 
