@@ -36,9 +36,12 @@ app.get('/expense/:id',findExpenseByUserId);
 app.post("/expense/add",addExpense);
 
 
+
+
 //income
 app.get("/income",getAllincome);
 app.post("/income/create",createIncome);
+
 
 
 
