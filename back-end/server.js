@@ -27,6 +27,13 @@ app.post("/signin",loginUser);
 app.post("/signup",registeredUser);
 
 
+// expense part
+//get all expenses
+app.get("/expense",findAllExpense);
+//get expenses by User Id
+app.get('/expense/:id',findExpenseByUserId);
+//add expense
+app.post("/expense/add",addExpense);
 
 
 
