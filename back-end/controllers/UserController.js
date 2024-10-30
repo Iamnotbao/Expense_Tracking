@@ -1,6 +1,6 @@
 
 const User = require("../models/users.js");
-const {  HashPassword } = require("../service/HashPassword.js");
+const { HashPassword } = require("../service/HashPassword.js");
 
 const getAllUser = async (req, res) => {
   let user;
@@ -13,7 +13,6 @@ const getAllUser = async (req, res) => {
       })
     } else {
       console.log(" user not data");
-
     }
 
 
@@ -24,41 +23,41 @@ const getAllUser = async (req, res) => {
   }
 
 }
-const registeredUser= async(req,res)=>{
-  const {username,password,email,phone, address} = req.body;
-  console.log(username+" "+password);
-  const userExist = await User.findOne({username:username});
-  
-  
-try {
-  if(!userExist){
-    const hashPassword = await HashPassword(password);
-    console.log("Your password after hasing checking :", hashPassword);
-    const user = new User({
-      username:username,
-      password:hashPassword,
-      email:email,
-      phone:phone,
-      address:address,
-      create_at:new Date(),
-      create_by:username,
-      update_at:null,
-      update_by:username
-    })
-    console.log("this user is create",user);
-    await user.save();
-  }else{
-    return res.status(401).json({
-      success:false,
-      message:"This user is already in use!"
-    })
+const registeredUser = async (req, res) => {
+  const { username, password, email, phone, address } = req.body;
+  console.log(username + " " + password);
+  const userExist = await User.findOne({ username: username });
+  try {
+    if (!userExist) {
+      const hashPassword = await HashPassword(password);
+      console.log("Your password after hasing checking :", hashPassword);
+      const user = new User({
+        username: username,
+        password: hashPassword,
+        email: email,
+        phone: phone,
+        address: address,
+        create_at: new Date(),
+        create_by: username,
+        update_at: null,
+        update_by: username,
+      })
+      console.log("this user is create", user);
+      await user.save();
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "This user is already in use!"
+      })
+    }
+
+
+
+  } catch (error) {
+
   }
 
-} catch (error) {
-  
-}
-  
-  
+
 
 }
 
@@ -74,12 +73,6 @@ const loginUser = async (req, res) => {
     })
   }
 }
-
-
-
-
-
-
 module.exports = {
   getAllUser,
   loginUser,

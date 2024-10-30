@@ -1,5 +1,5 @@
 const User = require("../models/users.js");
-const Income = require("../models/income.js")
+const Income = require("../models/incomes.js")
 
 
 const getAllincome = async (req, res) => {
@@ -25,8 +25,8 @@ const getAllincome = async (req, res) => {
 const createIncome = async (req, res) => {
     const { user, nameIncome, amount } = req.body;
 
-    const userExist = await User.find({ _id: user });
-        console.log(userExist);
+    const userExist = await User.findOne({ _id: user });
+     console.log(userExist);
 
     const incomes = new Income({
         nameIncome: nameIncome,
@@ -34,9 +34,12 @@ const createIncome = async (req, res) => {
         user: user
     })
     await  incomes.save();
+    console.log(userExist.listIncome);
+    
 
-
-   userExist.listIncome.push({ income: incomes._id });
+    userExist.listIncome.push({ income: incomes._id });
+    await userExist.save();
+    res.json(userExist)
     
     
 
