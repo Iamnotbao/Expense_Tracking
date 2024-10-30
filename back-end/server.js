@@ -2,6 +2,7 @@
 const {database} = require("./config/db");
 const express = require("express");
 const { getAllUser, loginUser, registeredUser } = require("./controllers/UserController");
+const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
 const { getAllincome, createIncome } = require("./controllers/IncomeController");
@@ -24,6 +25,10 @@ app.get("/users",getAllUser);
 app.post("/signin",loginUser);
 
 app.post("/signup",registeredUser);
+
+
+
+
 
 
 //income
