@@ -40,12 +40,10 @@ const createIncome = async (req, res) => {
     userExist.listIncome.push({ income: incomes._id });
     await userExist.save();
     res.json(userExist)
-
-
-
 }
+//Delete {func deleteIncome, {id}}
 
-
+// Update{func deleteIncome, {id,newIncome}}
 
 
 module.exports = { getAllincome, createIncome }
