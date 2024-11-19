@@ -1,0 +1,33 @@
+.dashBoardScreen{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    margin: 10px;
+}
+.numberAndChart{
+    flex: 1;
+    padding: 15px;
+    height: 100vh;
+}
+.table{
+    flex: 1;
+    padding: 15px;
+    height: 100vh;
+}
+.numberBlock{
+    display: flex;
+    flex-direction: row;
+}
+.infoBlock{
+    width: 200px;
+    height: 150px;
+    margin: 10px;
+    font-weight: "bold";
+    font-size: 15px;
+    background-color: red;
+    padding :10px;
+}
+.infoBlock h1{
+    font-size: 25px;
+    padding: 10px;
+}
