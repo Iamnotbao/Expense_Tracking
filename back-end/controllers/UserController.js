@@ -1,6 +1,8 @@
 
 const User = require("../models/users.js");
-const { HashPassword } = require("../service/HashPassword.js");
+const { HashPassword, ComparedPassword } = require("../service/HashPassword.js");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 const getAllUser = async (req, res) => {
   let user;
@@ -23,11 +25,17 @@ const getAllUser = async (req, res) => {
   }
 
 }
-<<<<<<< HEAD
 const registeredUser = async (req, res) => {
   const { username, password, email, phone, address } = req.body;
   console.log(username + " " + password);
   const userExist = await User.findOne({ username: username });
+  if (userExist) {
+    return res.status(401).json({
+      success: false,
+      errorCode: 100,
+      message: "This user is already exist!"
+    })
+  }
   try {
     if (!userExist) {
       const hashPassword = await HashPassword(password);
@@ -45,6 +53,10 @@ const registeredUser = async (req, res) => {
       })
       console.log("this user is create", user);
       await user.save();
+      return res.status(200).json({
+        success:true,
+        message:"User has been add !!!"
+      })
     } else {
       return res.status(401).json({
         success: false,
@@ -56,34 +68,6 @@ const registeredUser = async (req, res) => {
 
   } catch (error) {
 
-=======
-const registeredUser= async(req,res)=>{
-  const {username,password,email,phone, address} = req.body;
-  console.log(username+" "+password);
-  const userExist = await User.findOne({username:username});
-try {
-  if(!userExist){
-    const hashPassword = await HashPassword(password);
-    console.log("Your password after hasing checking :", hashPassword);
-    const user = new User({
-      username:username,
-      password:hashPassword,
-      email:email,
-      phone:phone,
-      address:address,
-      create_at:new Date(),
-      create_by:username,
-      update_at:null,
-      update_by:username
-    })
-    console.log("this user is create",user);
-    await user.save();
-  }else{
-    return res.status(401).json({
-      success:false,
-      message:"This user is already in use!"
-    })
->>>>>>> 206ad1271b2de1d2f7f5996bff86b6a2364ddd43
   }
 
 
@@ -93,13 +77,24 @@ try {
 const loginUser = async (req, res) => {
   const { username } = req.body;
   const { password } = req.body;
-  const user = await User.find({ username: username });
-  if (user) {
+  const user = await User.findOne({ username: username });
+  console.log(user.password);
+  
+  if (!user) {
     return res.status(401).json({
       success: false,
       errorCode: 100,
-      message: "This user is already exist!"
+      message: "Doesn't have this user!!!"
     })
+  }
+  if(password){
+    const existUser = await ComparedPassword(password, user.password);
+    if(existUser){
+
+    }
+    const client = {userId : user._id, username: user.username};
+    const token = jwt.sign(client,process.env.ACCESS_TOKEN);
+
   }
 }
 module.exports = {

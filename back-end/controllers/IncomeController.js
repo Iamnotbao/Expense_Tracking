@@ -26,25 +26,24 @@ const createIncome = async (req, res) => {
     const { user, nameIncome, amount } = req.body;
 
     const userExist = await User.findOne({ _id: user });
-     console.log(userExist);
+    console.log(userExist);
 
     const incomes = new Income({
         nameIncome: nameIncome,
         amount: amount,
         user: user
     })
-    await  incomes.save();
+    await incomes.save();
     console.log(userExist.listIncome);
-    
+
 
     userExist.listIncome.push({ income: incomes._id });
     await userExist.save();
     res.json(userExist)
-    
-    
-
 }
+//Delete {func deleteIncome, {id}}
 
+// Update{func deleteIncome, {id,newIncome}}
 
 
 module.exports = { getAllincome, createIncome }
