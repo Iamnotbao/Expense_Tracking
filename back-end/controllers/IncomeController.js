@@ -3,7 +3,7 @@ const Income = require("../models/incomes.js")
 
 
 const getAllincome = async (req, res) => {
-    const income = await Income.find({}).exec()
+    const income = await Income.find({}).populate('user').exec();
     try {
         if (income) {
             return res.status(200).json({

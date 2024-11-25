@@ -2,11 +2,12 @@ import React, { useState } from "react"
 // import axios from "axios"
 import "./CSS/MainPage.css";
 import DashBoard from "./DashBoard";
+import Sidebar from "./Sidebar";
 const MainPage = () => {
 
   return (
     <div className="app">
-      <div className="sidebar">
+      {/* <div className="sidebar">
         <div className="logo">
           <img src="./image/finance.png" alt="logo"/>
         </div>
@@ -20,7 +21,8 @@ const MainPage = () => {
           
           
         </ul>
-      </div>
+      </div> */}
+      <Sidebar/>
       <div className="main-content">
         <h1 style={{ fontSize: "30px", fontWeight: "bold", width: "400px", wordWrap: "break-word" }}>Project Expense Tracking Software</h1>
         <DashBoard />

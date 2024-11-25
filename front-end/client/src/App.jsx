@@ -3,7 +3,8 @@ import './App.css'
 import Login from './components/Login'
 import { Routes, Route, BrowserRouter} from "react-router-dom";
 import MainPage from './components/MainPage';
-import Income_DashBoard from './components/Income_Dashboard';
+import Income from './components/Income';
+
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
     <Routes>
       <Route path='expense_tracking/login' element={<Login/>}/>
       <Route path='expense_tracking/home' element={<MainPage/>}/>
-      <Route path='expense_tracking/home/income' element={<Income_DashBoard/>}/>
+      <Route path='expense_tracking/home/income' element={<Income/>}/>
+
     </Routes>
      </BrowserRouter>
      
