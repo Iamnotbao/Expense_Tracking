@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./CSS/Login.css"
+import { useNavigate } from "react-router-dom";
 import axios from "axios"
 
 const Login = () => {
@@ -7,6 +8,7 @@ const Login = () => {
         username: "",
         password: ""
     })
+    const navigation = useNavigate();
     const baseURL = "http://localhost:5000/signin"
     console.log("check data", data);
 
@@ -36,6 +38,10 @@ const Login = () => {
             console.log(response.data);
             if (response.data) {
                 console.log("Your data: ", response.data);
+                localStorage.setItem("user",response.data.username);
+                localStorage.setItem("token",response.data.token);
+                navigation("/expense_tracking/home");
+
             }
 
         } catch (error) {

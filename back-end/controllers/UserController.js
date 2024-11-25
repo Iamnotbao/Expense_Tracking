@@ -90,10 +90,15 @@ const loginUser = async (req, res) => {
   if(password){
     const existUser = await ComparedPassword(password, user.password);
     if(existUser){
-
+      const client = {userId : user._id, username: user.username};
+      const token = jwt.sign(client,process.env.ACCESS_TOKEN);
+      return res.status(200).json({
+        message:true,
+        username:user.username,
+        accessToken:token
+      })
     }
-    const client = {userId : user._id, username: user.username};
-    const token = jwt.sign(client,process.env.ACCESS_TOKEN);
+   
 
   }
 }
