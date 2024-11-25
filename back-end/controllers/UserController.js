@@ -14,7 +14,7 @@ const getAllUser = async (req, res) => {
         user
       })
     } else {
-      console.log(" user not data");
+      console.log(" user in data");
     }
 
 
@@ -26,8 +26,8 @@ const getAllUser = async (req, res) => {
 
 }
 const registeredUser = async (req, res) => {
-  const { username, password, email, phone, address } = req.body;
-  console.log(username + " " + password);
+  const { username, password, email, phone, address, notification } = req.body;
+  console.log("Received data:", req.body);
   const userExist = await User.findOne({ username: username });
   if (userExist) {
     return res.status(401).json({
@@ -50,12 +50,31 @@ const registeredUser = async (req, res) => {
         create_by: username,
         update_at: null,
         update_by: username,
+        notification: notification,
       })
       console.log("this user is create", user);
+      req.session.localUser = {
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        create_at: user.create_at,
+        create_by: user.create_by,
+        role_id: user.role_id,
+        notification: user.notification,
+        listIncome: user.listIncome,
+        listExpense: user.listExpense,
+      };
+      
+      console.log("check"+req.session);
+      
+
       await user.save();
       return res.status(200).json({
-        success:true,
-        message:"User has been add !!!"
+        success: true,
+        session: req.session,
+        message: "User has been add !!!"
       })
     } else {
       return res.status(401).json({
@@ -75,30 +94,58 @@ const registeredUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-  const { username } = req.body;
-  const { password } = req.body;
-  const user = await User.findOne({ username: username });
-  console.log(user.password);
-  
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      errorCode: 100,
-      message: "Doesn't have this user!!!"
-    })
-  }
-  if(password){
-    const existUser = await ComparedPassword(password, user.password);
-    if(existUser){
-
+  try {
+    const { username } = req.body;
+    const { password } = req.body;
+    const user = await User.findOne({ username: username });
+    
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        errorCode: 100,
+        message: "Doesn't have this user!!!"
+      })
     }
-    const client = {userId : user._id, username: user.username};
-    const token = jwt.sign(client,process.env.ACCESS_TOKEN);
+    if (password) {
+      const existUser = await ComparedPassword(password, user.password);
+      if (existUser) {
 
+      }
+      const client = { userId: user._id, username: user.username };
+      const token = jwt.sign(client, process.env.ACCESS_TOKEN, {
+        expiresIn: "1h",
+      });
+      req.session.localUser = {
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        create_at: user.create_at,
+        create_by: user.create_by,
+        role_id: user.role_id,
+        notification: user.notification,
+        listIncome: user.listIncome,
+        listExpense: user.listExpense,
+      };
+      console.log("check session "+JSON.stringify(req.session.localUser) );
+      return res.status(200).json({
+        success: true,
+        session: req.session,
+        message: "Login Successfully" 
+      });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({
+      success: false,
+      errorCode: 500,
+      message: "Internal server error!",
+    });
   }
 }
-module.exports = {
-  getAllUser,
-  loginUser,
-  registeredUser
-}
+  module.exports = {
+    getAllUser,
+    loginUser,
+    registeredUser
+  }

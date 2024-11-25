@@ -22,14 +22,81 @@
   }
   
   .sidebar li {
-    margin: 10px 0;
+    width: 100%;
     cursor: pointer;
-    margin: 20px;
+    margin-top: 30px;
   }
-  
+  .avatar{
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+  }
   .main-content {
     flex-grow: 1; 
     padding: 20px;
-    
+    height: 100vh;
+
+  }
+  .headNav{
+    width: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+  }
+  .userNameAvatar{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    right: 150px;
+    align-items: center;  
+    padding: 10px;
+  }
+  .notification{
+    position:relative;
+  }
+  .circleNumber{
+    border-width: 1px;
+    background-color: red;
+    text-align: center;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: auto;
+    width: 22px;
+    font-size: 10px;
+    height: 22px;
+    border-radius: 50%;
+    position: absolute;
+    top : -15px;
+    right:-8px;
+  }
+  .selected {
+    position: relative;
+    color: white;
+    width: 100%;
+    z-index: 1;
+  } 
+  .selected::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 0%;
+    height: 100%;
+    background-color: #743dbb;
+    color: white;
+    animation: slideIn 0.5s ease-out forwards;
+  }
+  @keyframes slideIn {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
   }
   

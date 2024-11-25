@@ -1,0 +1,27 @@
+/* CSS (table.css) */
+.table-container {
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    height: 300px;
+}
+
+.display {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.display th {
+    background-color: black;
+    color: white;
+    padding: 8px;
+    text-align: center;
+}
+
+.display td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}

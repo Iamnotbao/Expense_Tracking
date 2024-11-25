@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const Expense = require("./expense");
 
 
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    phone: Number,
+    phone: String,
     create_at: {
         type: Date,
         default: new Date()
@@ -18,7 +19,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    notification: {
+        type: Boolean, // Định nghĩa kiểu dữ liệu Boolean
+        default: true   // Mặc định là true nếu không có giá trị nào được cung cấp
+    },
     balance: Number,
+    income: Number,
     //listHistory: 
     listIncome: [{
         income: {
@@ -26,9 +32,15 @@ const userSchema = new mongoose.Schema({
             ref: "incomes",
             required: true
         }
-    }]
-
-
+    }],
+    //list expense
+    listExpense: [{
+            expense: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "expense",
+                required: true
+            }
+        }]
 })
 userSchema.post('save', async function (doc, next) {
     try {

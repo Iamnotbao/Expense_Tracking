@@ -1,8 +1,11 @@
 import React from "react";
 import Chart from 'chart.js/auto';
 import "./CSS/DashBoard.css"
+import { useRef, useEffect, useState } from "react";
 import ChartComponent from "./ChartComponent";
+import Table from "./Table";
 const DashBoard = () => {
+    const tableRef = useRef(null);
     return (
         <div className="dashBoardScreen">
             <div className="numberAndChart">
@@ -21,12 +24,14 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div className="chart">
-                <ChartComponent/>
+                    <ChartComponent />
 
                 </div>
             </div>
             <div className="table">
-                <h1>this is table</h1>
+         
+                    <Table/>
+
             </div>
         </div>
     )

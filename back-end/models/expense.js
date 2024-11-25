@@ -10,7 +10,6 @@ const expenseSchema = new mongoose.Schema({
     amount: Number,
     description: String,
     paymentMethod: String,
-    recurring: { type: Boolean, default: false },
     location: String,
     paymentDate: { type: Date, default: new Date() }
 }, { timestamps: true });

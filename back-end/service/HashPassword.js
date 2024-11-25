@@ -26,7 +26,7 @@ const HashPassword = async (password) => {
 
 }
 const ComparedPassword = async(password,user_password)=>{
-    console.log(password,user_password);
+    //console.log(password,user_password);
     
     if (password) {
         return new Promise((resolve,reject)=>{
