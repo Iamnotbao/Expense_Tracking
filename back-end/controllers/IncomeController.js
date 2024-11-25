@@ -7,7 +7,7 @@ const getAllincome = async (req, res) => {
     try {
         if (income) {
             return res.status(200).json({
-                message: true,
+                success:true,
                 income
             })
         }

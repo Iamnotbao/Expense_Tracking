@@ -4,7 +4,9 @@ import { Chart } from 'chart.js';
 const ChartComponent = () => {
     const chartRef = useRef(null); // Sử dụng useRef để tạo tham chiếu đến canvas element
     const chartInstanceRef = useRef(null);
+    
 
+   
     useEffect(() => {
 
         const data = [

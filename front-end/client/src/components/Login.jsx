@@ -35,11 +35,14 @@ const Login = () => {
         let response;
         try {
             response = await axios(options);
-            console.log(response.data);
             if (response.data) {
-                console.log("Your data: ", response.data);
-                localStorage.setItem("user",response.data.username);
-                localStorage.setItem("token",response.data.token);
+                sessionStorage.setItem("user",response.data.username);
+                sessionStorage.setItem("token",JSON.stringify(response.data.accessToken));
+                const t = sessionStorage.getItem("token");
+                console.log(t);
+                
+            
+                
                 navigation("/expense_tracking/home");
 
             }
