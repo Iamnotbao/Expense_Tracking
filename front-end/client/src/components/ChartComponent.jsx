@@ -3,11 +3,12 @@ import { Chart } from 'chart.js';
 
 const ChartComponent = () => {
     const chartRef = useRef(null); // Sử dụng useRef để tạo tham chiếu đến canvas element
+    const chartInstanceRef = useRef(null);
 
     useEffect(() => {
 
         const data = [
-            { year: 2010, count: 10 },
+            { year: 2010, count: 20 },
             { year: 2011, count: 20 },
             { year: 2012, count: 15 },
             { year: 2013, count: 25 },
@@ -17,7 +18,7 @@ const ChartComponent = () => {
         ];
 
 
-        new Chart(chartRef.current, {
+        chartInstanceRef.current= new Chart(chartRef.current, {
             type: 'line',
             data: {
                 labels: data.map(row => row.year),
@@ -34,7 +35,7 @@ const ChartComponent = () => {
             options: {
                 responsive: true,
                 scales: {
-                   
+
                     y: {
                         beginAtZero: true,
                     },
@@ -42,10 +43,11 @@ const ChartComponent = () => {
                 animation: true,
             },
         });
-            console.log(new Date());
+        console.log(new Date());
         return () => {
-            if (chartRef.current) {
-                chartRef.current.chartInstance.destroy();
+            if (chartInstanceRef.current) {
+                chartInstanceRef.current.destroy();
+                chartInstanceRef.current = null;
             }
         };
     }, []);
