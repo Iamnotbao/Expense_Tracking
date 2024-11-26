@@ -64,7 +64,7 @@ const Signup = ({ onRotate }) => {
         try {
             const response = await axios.post('http://localhost:5000/signup', data, {
                 headers: {
-                    "Content-Type": "application/json", // Đảm bảo gửi dữ liệu dưới dạng JSON
+                    "Content-Type": "application/json", 
                 },
             });
             localStorage.setItem("localUser", JSON.stringify(response.data.session.localUser));
@@ -78,10 +78,10 @@ const Signup = ({ onRotate }) => {
     }
     return (
         <>
-            {/* const { username, password, email, phone, address, notification } = req.body; */}
+            
 
             <div className="box">
-                <i style={{ color: "white", fontSize: "20px", padding: "10px" }} className="bi bi-arrow-return-left" onClick={onRotate}></i>
+                <i style={{ color: "white", fontSize: "20px", padding: "10px" }} onClick={onRotate} class="fa-solid fa-arrow-left"></i>
                 <h2 style={{ color: "white", fontSize: "40px", marginBottom: "20px" }}>Sign up</h2>
                 <form action="" method="GET" className="d-flex align-items-center flex-column" onSubmit={handleSubmit}>
                     <p style={{ color: "white", fontSize: "15px" }}>User name</p>

@@ -2,30 +2,29 @@ import React, { useState, useRef } from "react";
 import "./CSS/Login.css"
 import axios from "axios"
 import Signup from "./Signup";
-import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
 const Login = () => {
     const navigate = useNavigate();
 
+    // const showLoginFail = () => {
+    //     Swal.fire({
+    //         icon: "error",
+    //         title: "Oops...",
+    //         text: "wrong user or password",
+    //       });
+    // };
 
-    const showLoginFail = () => {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "wrong user or password",
-          });
-    };
 
-
-    const showLoginSuccess= ()=>{
-        Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Login Successfully",
-            showConfirmButton: false,
-            timer: 1000
-          });
-    }
+    // const showLoginSuccess= ()=>{
+    //     Swal.fire({
+    //         position: "center",
+    //         icon: "success",
+    //         title: "Login Successfully",
+    //         showConfirmButton: false,
+    //         timer: 1000
+    //       });
+    // }
 
 
     const usernameRef = useRef(null);
@@ -60,7 +59,7 @@ const Login = () => {
                 console.log(user);
                
                 showLoginSuccess();
-                navigate("/MainPage");
+                navigate("expense_tracking/home");
             }
 
 
