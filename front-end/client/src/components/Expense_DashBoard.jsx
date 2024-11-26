@@ -9,9 +9,11 @@ const Expense_DashBoard = () => {
     const [add, setAdd] = useState(false);
     const [edit, setEdit] = useState(false);
     const [deleteP, setDeleteP] = useState(false);
+    const [selectedExpense, setSelectedExpense] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
     console.log(expense);
-    
-   
+
+
 
 
     console.log(token);
@@ -44,8 +46,8 @@ const Expense_DashBoard = () => {
                     }
                 })
                 console.log("expense", response.data);
-               
-                if(response.data){
+
+                if (response.data) {
                     setExpense(response.data);
                 }
             } catch (error) {
@@ -55,6 +57,21 @@ const Expense_DashBoard = () => {
         }
         fetchData();
     }, [])
+    const handleCheckBox = (id) => {
+        setSelectedExpense((prevSelected) => {
+            return prevSelected.includes(id)
+                ? prevSelected.filter((item) => item !== id)
+                : [...prevSelected, id];
+        })
+    }
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setSelectedExpense([]);
+        } else {
+            setSelectedExpense(expense.map(item => item._id));
+        }
+        setSelectAll(!selectAll);
+    }
     return (
         <>
             <div className="container">
@@ -67,7 +84,7 @@ const Expense_DashBoard = () => {
                                 </div>
                                 <div className="col-xs-6">
                                     <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
-                                    <button className="btn btn-danger" data-toggle="modal"  onClick={(event) => { handleDeletePopUp(event) }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
+                                    <button className="btn btn-danger" data-toggle="modal" onClick={(event) => { handleDeletePopUp(event) }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +93,7 @@ const Expense_DashBoard = () => {
                                 <tr>
                                     <th>
                                         <span className="custom-checkbox">
-                                            <input type="checkbox" id="selectAll" />
+                                            <input type="checkbox" id="selectAll" onChange={() => { handleSelectAll() }} />
                                             <label htmlFor="selectAll"></label>
                                         </span>
                                     </th>
@@ -87,27 +104,30 @@ const Expense_DashBoard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {expense.length !==0 &&
-                                    expense.map((item,index)=>(
+                                {expense.length !== 0 &&
+                                    expense.map((item, index) => (
                                         <tr key={index}>
-                                        <td>
-                                            <span className="custom-checkbox">
-                                                <input type="checkbox" id="checkbox1" className="options[]" value="1" />
-                                                <label htmlFor="checkbox1"></label>
-                                            </span>
-                                        </td>
-                                        <td>{index+1}</td>
-                                        <td>{item.category}</td>
-                                        <td>{item.amount}$</td>
-                                       
-                                        <td>
-                                            <a href="#editEmployeeModal" className="edit" onClick={(event) => { handleEditPopUp(event) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="#deleteEmployeeModal" className="delete"  onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                        </td>
-                                    </tr>
+                                            <td>
+                                                <span className="custom-checkbox">
+                                                    <input type="checkbox" id="checkbox1" className="options[]"
+                                                        value="1"
+                                                        checked={selectAll || selectedExpense.includes(item._id)}
+                                                        onChange={() => { handleCheckBox(item._id)}} />
+                                                    <label htmlFor="checkbox1"></label>
+                                                </span>
+                                            </td>
+                                            <td>{index + 1}</td>
+                                            <td>{item.category}</td>
+                                            <td>{item.amount}$</td>
+
+                                            <td>
+                                                <a href="#editEmployeeModal" className="edit" onClick={(event) => { handleEditPopUp(event) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                <a href="#deleteEmployeeModal" className="delete" onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            </td>
+                                        </tr>
                                     )
-                                )}
-                               
+                                    )}
+
 
                             </tbody>
                         </table>

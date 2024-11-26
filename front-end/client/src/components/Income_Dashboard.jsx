@@ -11,11 +11,11 @@ const Income_DashBoard = () => {
     const [deleteP, setDeleteP] = useState(false);
     const [select, setSelect] = useState(null);
     const [newAdd, setNewAdd] = useState(null);
-
-    console.log("select", select);
+    const [selectedIncome, setSelectedIncome] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
     const handleDelete = async (event) => {
         event.preventDefault();
-    
+
         let deleteIncome = {
             userID: select.user._id,
         };
@@ -26,10 +26,10 @@ const Income_DashBoard = () => {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(token)}`,
                     },
-                    data: deleteIncome, 
+                    data: deleteIncome,
                 }
             );
-    
+
             if (response.data) {
                 handleCancle();
             }
@@ -52,10 +52,10 @@ const Income_DashBoard = () => {
         }
 
         try {
-            const response = await axios.put(`${baseURL}/${select._id}`,newEdit,{
+            const response = await axios.put(`${baseURL}/${select._id}`, newEdit, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
-                },  
+                },
             })
             if (response.data) {
                 handleCancle();
@@ -76,6 +76,7 @@ const Income_DashBoard = () => {
         setEdit(true);
     };
     const handleDeletePopUp = (income) => {
+        console.log(selectedIncome);
         setSelect(income)
         setDeleteP(true);
     };
@@ -85,7 +86,21 @@ const Income_DashBoard = () => {
         setEdit(false);
         setDeleteP(false)
     }
-
+    const handleCheckBox = (id) => {
+        setSelectedIncome((prevSelected) => {
+            return prevSelected.includes(id)
+                ? prevSelected.filter((item) => item !== id)
+                : [...prevSelected, id];
+        })
+    }
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setSelectedIncome([]);
+        } else {
+            setSelectedIncome(income.map(item => item._id));
+        }
+        setSelectAll(!selectAll); 
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -126,7 +141,7 @@ const Income_DashBoard = () => {
                                 <tr>
                                     <th>
                                         <span className="custom-checkbox">
-                                            <input type="checkbox" id="selectAll" />
+                                            <input type="checkbox" id="selectAll" onChange={() => { handleSelectAll() }} />
                                             <label htmlFor="selectAll"></label>
                                         </span>
                                     </th>
@@ -142,7 +157,9 @@ const Income_DashBoard = () => {
                                         <tr key={index}>
                                             <td>
                                                 <span className="custom-checkbox">
-                                                    <input type="checkbox" id="checkbox1" className="options[]" value="1" />
+                                                    <input type="checkbox" id="checkbox1" className="options[]" value="1"
+                                                        checked={selectAll || selectedIncome.includes(item._id)}
+                                                        onChange={() => { handleCheckBox(item._id) }} />
                                                     <label htmlFor="checkbox1"></label>
                                                 </span>
                                             </td>
@@ -180,7 +197,6 @@ const Income_DashBoard = () => {
             </div>
 
             {add && (
-
                 <div id="addModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
