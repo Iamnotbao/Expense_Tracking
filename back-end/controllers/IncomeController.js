@@ -43,18 +43,20 @@ const createIncome = async (req, res) => {
     res.json(userExist)
 }
 const deleteIncome = async (req, res) => {
+    console.log("ok");
+    
     //func deleteIncome, {id}
-    const { userID, idIncome } = req.body;
+    const { userID } = req.body;
     const userExist = await User.findOne({ _id: userID });
 
     const newlist = [];
 
     const result = userExist.listIncome.forEach( async(item) => {
-        if (!(item.income.equals(idIncome))) {
+        if (!(item.income.equals(req.params.id))) {
            newlist.push(item);
         }
         else{
-           const response = await Income.deleteOne({_id:idIncome})
+           const response = await Income.deleteOne({_id:req.params.id})
            if(response.data){
             console.log("ok");
             
@@ -77,6 +79,8 @@ const deleteIncome = async (req, res) => {
 const UpdateIncome = async (req, res) => {
 
     const { idIncome ,nameIncome, amount} = req.body;
+    console.log(idIncome);
+    
 
     //const user = await User.findOne({ _id: userID });
 

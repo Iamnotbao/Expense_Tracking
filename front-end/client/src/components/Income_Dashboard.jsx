@@ -12,24 +12,55 @@ const Income_DashBoard = () => {
     const [select, setSelect] = useState(null);
     const [newAdd, setNewAdd] = useState(null);
 
-    console.log("token", token);
-
+    console.log("select", select);
+    const handleDelete = async (event) => {
+        event.preventDefault();
+    
+        let deleteIncome = {
+            userID: select.user._id,
+        };
+        try {
+            const response = await axios.delete(
+                `${baseURL}/${select._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(token)}`,
+                    },
+                    data: deleteIncome, 
+                }
+            );
+    
+            if (response.data) {
+                handleCancle();
+            }
+        } catch (error) {
+            console.error("Error deleting income:", error);
+        }
+    };
 
 
 
     const handleEdit = async (event) => {
+
         event.preventDefault();
-        const newEdit = {
+
+
+        let newEdit = {
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
+            idIncome: select._id
         }
 
         try {
-            const response = await axios.post(`${baseURL}/update,newEdit,{
-               "Authorization": `Bearer ${JSON.parse(token)}`
+            const response = await axios.put(`${baseURL}/${select._id}`,newEdit,{
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                },  
             })
-            console.log(response.data);
-            
+            if (response.data) {
+                handleCancle();
+            }
+
         } catch (error) {
             console.log(error);
 
@@ -44,8 +75,8 @@ const Income_DashBoard = () => {
         setSelect(income);
         setEdit(true);
     };
-    const handleDeletePopUp = () => {
-
+    const handleDeletePopUp = (income) => {
+        setSelect(income)
         setDeleteP(true);
     };
 
@@ -123,7 +154,7 @@ const Income_DashBoard = () => {
 
                                             <td>
                                                 <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                                <a className="delete" onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                             </td>
                                         </tr>
                                     )
@@ -185,7 +216,7 @@ const Income_DashBoard = () => {
                 <div id="editModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form  onSubmit={handleEdit}>
+                            <form onSubmit={handleEdit}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Edit Income</h4>
                                     <button type="button" className="close" data-dismiss="modal">&times;</button>
@@ -214,13 +245,13 @@ const Income_DashBoard = () => {
                 <div id="deleteModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form onSubmit={handleDelete}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Delete Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete these Records?</p>
+                                    <p>Are you sure you want to delete <span><b>{select.nameIncome}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">
