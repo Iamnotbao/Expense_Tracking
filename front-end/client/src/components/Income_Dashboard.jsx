@@ -10,19 +10,38 @@ const Income_DashBoard = () => {
     const [edit, setEdit] = useState(false);
     const [deleteP, setDeleteP] = useState(false);
     const [select, setSelect] = useState(null);
-    console.log("select",select);
-    
-   
+    const [newAdd, setNewAdd] = useState(null);
+
+    console.log("token", token);
 
 
-    console.log(token);
+
+
+    const handleEdit = async (event) => {
+        event.preventDefault();
+        const newEdit = {
+            nameIncome: event.target.nameIncome.value,
+            amount: event.target.amount.value,
+        }
+
+        try {
+            const response = await axios.post(`${baseURL}/update,newEdit,{
+               "Authorization": `Bearer ${JSON.parse(token)}`
+            })
+            console.log(response.data);
+            
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     const handleAddPopUp = () => {
 
         setAdd(true);
     };
-    const handleEditPopUp = (id) => {
-        setSelect(id)
+    const handleEditPopUp = (income) => {
+        setSelect(income);
         setEdit(true);
     };
     const handleDeletePopUp = () => {
@@ -45,7 +64,7 @@ const Income_DashBoard = () => {
                     }
                 })
                 console.log("income", response.data);
-                if(response.data){
+                if (response.data) {
                     setIncome(response.data.income);
                 }
             } catch (error) {
@@ -66,8 +85,8 @@ const Income_DashBoard = () => {
                                     <h2>Manage <b>Income</b></h2>
                                 </div>
                                 <div className="col-xs-6">
-                                    <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
-                                    <button className="btn btn-danger" data-toggle="modal"  onClick={(event) => { handleDeletePopUp(event) }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
+                                    <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Income</span></button>
+                                    <button className="btn btn-danger" data-toggle="modal" onClick={(event) => { handleDeletePopUp(event) }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
                                 </div>
                             </div>
                         </div>
@@ -87,29 +106,29 @@ const Income_DashBoard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {income.length !==0 &&
-                                    income.map((item,index)=>(
+                                {income.length !== 0 &&
+                                    income.map((item, index) => (
                                         <tr key={index}>
-                                        <td>
-                                            <span className="custom-checkbox">
-                                                <input type="checkbox" id="checkbox1" className="options[]" value="1" />
-                                                <label htmlFor="checkbox1"></label>
-                                            </span>
-                                        </td>
-                                        <td>{index+1}</td>
-                                        <td>{item.nameIncome}</td>
-                                        <td>{item.amount}$</td>
-                                        
-                                        {item.user&&(item.user.username)?(<td>{item.user.username}</td>):(<td>Loading....</td>)}
-                                       
-                                        <td>
-                                            <a href="#editEmployeeModal" className="edit" onClick={() => { handleEditPopUp(item._id) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="#deleteEmployeeModal" className="delete"  onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                        </td>
-                                    </tr>
+                                            <td>
+                                                <span className="custom-checkbox">
+                                                    <input type="checkbox" id="checkbox1" className="options[]" value="1" />
+                                                    <label htmlFor="checkbox1"></label>
+                                                </span>
+                                            </td>
+                                            <td>{index + 1}</td>
+                                            <td>{item.nameIncome}</td>
+                                            <td>{item.amount}$</td>
+
+                                            {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
+
+                                            <td>
+                                                <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                <a className="delete" onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            </td>
+                                        </tr>
                                     )
-                                )}
-                               
+                                    )}
+
 
                             </tbody>
                         </table>
@@ -142,15 +161,11 @@ const Income_DashBoard = () => {
                                 <div className="modal-body">
                                     <div className="form-group">
                                         <label>Income Name</label>
-                                        <input type="text" className="form-control" required />
+                                        <input type="text" name="nameIncome" className="form-control" required />
                                     </div>
                                     <div className="form-group">
                                         <label>Amount</label>
-                                        <input type="email" className="form-control" required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Author</label>
-                                        <textarea className="form-control" required></textarea>
+                                        <input type="number" name="amount" className="form-control" required />
                                     </div>
                                 </div>
                                 <div className="modal-footer">
@@ -170,28 +185,21 @@ const Income_DashBoard = () => {
                 <div id="editModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form  onSubmit={handleEdit}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Edit Income</h4>
-                                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div className="modal-body">
                                     <div className="form-group">
-                                        <label>Name</label>
-                                        <input type="text" className="form-control" required />
+                                        <label htmlFor="nameIncome">Income Name</label>
+                                        <input type="text" className="form-control" name="nameIncome" defaultValue={select.nameIncome} required id="nameIncome" />
                                     </div>
                                     <div className="form-group">
-                                        <label>Email</label>
-                                        <input type="email" className="form-control" required />
+                                        <label htmlFor="amount">Amount</label>
+                                        <input type="number" name="amount" className="form-control" defaultValue={select.amount} required id="amount" />
                                     </div>
-                                    <div className="form-group">
-                                        <label>Address</label>
-                                        <textarea className="form-control" required></textarea>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Phone</label>
-                                        <input type="text" className="form-control" required />
-                                    </div>
+
                                 </div>
                                 <div className="modal-footer">
                                     <input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel" onClick={handleCancle} />
@@ -208,7 +216,7 @@ const Income_DashBoard = () => {
                         <div className="modal-content">
                             <form>
                                 <div className="modal-header">
-                                    <h4 className="modal-title">Delete Employee</h4>
+                                    <h4 className="modal-title">Delete Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">

@@ -35,8 +35,8 @@ app.post("/signup",registeredUser);
 //income
 app.get("/income",AuthController,getAllincome);
 app.post("/income/create",AuthController,createIncome);
-app.delete("/income/delete",AuthController,deleteIncome);
-app.post("/income/update",AuthController,UpdateIncome);
+app.delete("/income/delete/:id",AuthController,deleteIncome);
+app.post("/income/update/:id",AuthController,UpdateIncome);
 
 //expense
 
