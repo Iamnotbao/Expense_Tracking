@@ -35,12 +35,10 @@ const Login = () => {
             if (response.data) {
                 const token = response.data.accessToken;
                 console.log(token);
-                
                 const user = response.data.user;
                 sessionStorage.setItem("user",JSON.stringify(user));
                 sessionStorage.setItem("token",JSON.stringify(token));
                 console.log(user);
-               
                 navigate("/expense_tracking/home");
             }
 
