@@ -7,7 +7,7 @@ const getAllincome = async (req, res) => {
     try {
         if (income) {
             return res.status(200).json({
-                success:true,
+                success: true,
                 income
             })
         }
@@ -23,15 +23,15 @@ const getAllincome = async (req, res) => {
 
 }
 const createIncome = async (req, res) => {
-    const { user, nameIncome, amount } = req.body;
+    const { userID, nameIncome, amount } = req.body;
 
-    const userExist = await User.findOne({ _id: user });
+    const userExist = await User.findOne({ _id: userID });
     console.log(userExist);
 
     const incomes = new Income({
         nameIncome: nameIncome,
         amount: amount,
-        user: user
+        user: userID
     })
 
     await incomes.save();
@@ -42,39 +42,59 @@ const createIncome = async (req, res) => {
     await userExist.save();
     res.json(userExist)
 }
-const deleteIncome = async (req, res) =>  {
+const deleteIncome = async (req, res) => {
     //func deleteIncome, {id}
-    const {userID , idIncome} =  req.body;
+    const { userID, idIncome } = req.body;
     const userExist = await User.findOne({ _id: userID });
 
-    const newlist =[];
+    const newlist = [];
 
-    const result = userExist.listIncome.forEach((item)=>{
-                if(!(item.income.equals(idIncome))){
-                    newlist.push(item);  
-                }
+    const result = userExist.listIncome.forEach( async(item) => {
+        if (!(item.income.equals(idIncome))) {
+           newlist.push(item);
+        }
+        else{
+           const response = await Income.deleteOne({_id:idIncome})
+           if(response.data){
+            console.log("ok");
+            
+           }else{
+            console.log("no");
+           }  
+        }
 
     });
 
     userExist.listIncome = newlist;
-    
+
     res.json(userExist.listIncome);
+
+    await userExist.save();
+}
+
+
+
+const UpdateIncome = async (req, res) => {
+
+    const { idIncome ,nameIncome, amount} = req.body;
+
+    //const user = await User.findOne({ _id: userID });
+
+    const result = await Income.findOne({_id:idIncome})
+
+    result.nameIncome = nameIncome;
+    result.amount = amount;
     
-     await userExist.save();
-}
+    if (result) {
+        console.log("ok");
+    }
+    else {
+        console.log("not");
+    }
+
+    res.json(result);
+    await result.save();
+};
 
 
-
-const Update = async (req, res) =>{
-
-    const {userID , idIncome} =  req.body;
- 
-  const user = await User.findOne({ _id: userID });
-
-
-  
-
-}
-
-
-module.exports = { getAllincome, createIncome, deleteIncome}
+module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome }
