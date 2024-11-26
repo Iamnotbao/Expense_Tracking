@@ -200,7 +200,7 @@ const Income_DashBoard = () => {
                 <div id="addModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form onSubmit={handleAdd}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Add Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" onClick={handleCancle}>&times;</button>

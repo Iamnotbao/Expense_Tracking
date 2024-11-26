@@ -36,7 +36,9 @@ const Login = () => {
                 const token = response.data.accessToken;
                 console.log(token);
                 const user = response.data.user;
+                const userID = response.data.userID;
                 sessionStorage.setItem("user",JSON.stringify(user));
+                sessionStorage.setItem("userID",JSON.stringify(userID));
                 sessionStorage.setItem("token",JSON.stringify(token));
                 console.log(user);
                 navigate("/expense_tracking/home");
