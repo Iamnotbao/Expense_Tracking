@@ -62,7 +62,7 @@ const Income_DashBoard = () => {
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <h2>Manage <b>Employees</b></h2>
+                                    <h2>Manage <b>Income</b></h2>
                                 </div>
                                 <div className="col-xs-6">
                                     <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
@@ -91,14 +91,16 @@ const Income_DashBoard = () => {
                                         <tr key={index}>
                                         <td>
                                             <span className="custom-checkbox">
-                                                <input type="checkbox" id="checkbox1" name="options[]" value="1" />
+                                                <input type="checkbox" id="checkbox1" className="options[]" value="1" />
                                                 <label htmlFor="checkbox1"></label>
                                             </span>
                                         </td>
                                         <td>{index+1}</td>
                                         <td>{item.nameIncome}</td>
                                         <td>{item.amount}$</td>
-                                        <td>{item.user.username}</td>
+                                        {/* <td>{(item.user.username)?(item.user.username):("not found")}</td> */}
+                                        {item.user&&(item.user.username)?(<td>{item.user.username}</td>):(<td>Loading....</td>)}
+                                       
                                         <td>
                                             <a href="#editEmployeeModal" className="edit" onClick={(event) => { handleEditPopUp(event) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                             <a href="#deleteEmployeeModal" className="delete"  onClick={handleDeletePopUp}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
