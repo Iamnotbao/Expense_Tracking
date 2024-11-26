@@ -10,12 +10,40 @@ const Income_DashBoard = () => {
     const [edit, setEdit] = useState(false);
     const [deleteP, setDeleteP] = useState(false);
     const [select, setSelect] = useState(null);
-    const [newAdd, setNewAdd] = useState(null);
+    const userID = JSON.parse(sessionStorage.getItem("userID"));
+    console.log("user ID:",userID);
+    
 
     console.log("select", select);
+    const handleAdd =async () => {
+        event.preventDefault();
+        const newAdd = {
+            nameIncome: event.target.nameIncome.value,
+            amount: event.target.amount.value,
+            userID:userID
+        }
+        try {
+            const response = await axios.post(`${baseURL}/create`,newAdd,{
+                headers:{
+                    Authorization:`Bearer ${JSON.parse(token)}`
+                }
+            })
+            if(response.data){
+                console.log(response.data);
+                handleCancle();
+                
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+        console.log(newAdd);
+        
+
+    }
     const handleDelete = async (event) => {
         event.preventDefault();
-    
+
         let deleteIncome = {
             userID: select.user._id,
         };
@@ -26,10 +54,10 @@ const Income_DashBoard = () => {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(token)}`,
                     },
-                    data: deleteIncome, 
+                    data: deleteIncome,
                 }
             );
-    
+
             if (response.data) {
                 handleCancle();
             }
@@ -52,10 +80,10 @@ const Income_DashBoard = () => {
         }
 
         try {
-            const response = await axios.put(`${baseURL}/${select._id}`,newEdit,{
+            const response = await axios.put(`${baseURL}/${select._id}`, newEdit, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
-                },  
+                },
             })
             if (response.data) {
                 handleCancle();
@@ -184,7 +212,7 @@ const Income_DashBoard = () => {
                 <div id="addModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form onSubmit={handleAdd}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Add Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" onClick={handleCancle}>&times;</button>
