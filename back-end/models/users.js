@@ -18,7 +18,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    balance: Number,
+    balance:  {
+        type: Number,
+        default: 0
+    },
     //listHistory: 
     listIncome: [{
         income: {
@@ -26,7 +29,15 @@ const userSchema = new mongoose.Schema({
             ref: "incomes",
             required: true
         }
+    }],
+    listExpense: [{
+        expense: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "expenses",
+            required: true
+        }
     }]
+    
 
 
 })
