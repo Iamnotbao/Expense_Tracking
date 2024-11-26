@@ -63,15 +63,8 @@ const registeredUser = async (req, res) => {
         message: "This user is already in use!"
       })
     }
-
-
-
   } catch (error) {
-
   }
-
-
-
 }
 
 const loginUser = async (req, res) => {
@@ -98,6 +91,12 @@ const loginUser = async (req, res) => {
       })
     }
    
+//Budget
+//Notification Budget
+//Tax Deduction
+//transfer to PDF 
+//Profile
+
 
   }
 }
