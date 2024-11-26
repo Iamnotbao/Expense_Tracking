@@ -3,28 +3,8 @@ import "./CSS/Login.css"
 import axios from "axios"
 import Signup from "./Signup";
 import { useNavigate } from "react-router-dom";
-// import Swal from "sweetalert2";
 const Login = () => {
     const navigate = useNavigate();
-
-    // const showLoginFail = () => {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Oops...",
-    //         text: "wrong user or password",
-    //       });
-    // };
-
-
-    // const showLoginSuccess= ()=>{
-    //     Swal.fire({
-    //         position: "center",
-    //         icon: "success",
-    //         title: "Login Successfully",
-    //         showConfirmButton: false,
-    //         timer: 1000
-    //       });
-    // }
 
 
     const usernameRef = useRef(null);
