@@ -62,7 +62,7 @@ const Income_DashBoard = () => {
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <h2>Manage <b>Employees</b></h2>
+                                    <h2>Manage <b>Income</b></h2>
                                 </div>
                                 <div className="col-xs-6">
                                     <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></button>

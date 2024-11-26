@@ -53,18 +53,19 @@ const Login = () => {
             response = await axios(options);
             console.log(response.data);
             if (response.data) {
-                console.log("Your data: ", response);
-                const user = response.data.session.localUser;
-                localStorage.setItem("localUser",JSON.stringify(user));
+                const token = response.data.accessToken;
+                console.log(token);
+                
+                const user = response.data.user;
+                sessionStorage.setItem("user",JSON.stringify(user));
+                sessionStorage.setItem("token",JSON.stringify(token));
                 console.log(user);
                
-                showLoginSuccess();
-                navigate("expense_tracking/home");
+                navigate("/expense_tracking/home");
             }
 
 
         } catch (error) {
-            showLoginFail()
             console.log("cannot fetch the data", error);
         }
     }
@@ -92,7 +93,7 @@ const Login = () => {
     const LoginContent = () => {
         return (
 
-            <div>
+            <div style={{cursor:"pointer"}}>
                 <h2 style={{ color: "white", fontSize: "40px", marginBottom: "20px" }}>Login</h2>
                 <form  method="POST" className="d-flex align-items-center flex-column" onSubmit={handleSubmit}>
                     <input type="text" className="textbox" placeholder="type your username" name="username"

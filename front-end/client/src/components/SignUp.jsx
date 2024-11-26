@@ -80,8 +80,8 @@ const Signup = ({ onRotate }) => {
         <>
             
 
-            <div className="box">
-                <i style={{ color: "white", fontSize: "20px", padding: "10px" }} onClick={onRotate} class="fa-solid fa-arrow-left"></i>
+            <div className="box" style={{cursor:"pointer"}}>
+                <i style={{ color: "white", fontSize: "20px" }} onClick={onRotate} class="fa-solid fa-arrow-left"></i>
                 <h2 style={{ color: "white", fontSize: "40px", marginBottom: "20px" }}>Sign up</h2>
                 <form action="" method="GET" className="d-flex align-items-center flex-column" onSubmit={handleSubmit}>
                     <p style={{ color: "white", fontSize: "15px" }}>User name</p>
