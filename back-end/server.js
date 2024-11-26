@@ -5,7 +5,7 @@ const { getAllUser, loginUser, registeredUser } = require("./controllers/UserCon
 const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
-const { getAllincome, createIncome } = require("./controllers/IncomeController");
+const { getAllincome, createIncome, deleteIncome } = require("./controllers/IncomeController");
 const { AuthController } = require("./controllers/AuthController");
 const app = express();
 
@@ -35,8 +35,13 @@ app.post("/signup",registeredUser);
 //income
 app.get("/income",AuthController,getAllincome);
 app.post("/income/create",AuthController,createIncome);
+app.delete("/income/delete",AuthController,deleteIncome);
 
+//expense
 
-
+app.post("/expense/findAll",findAllExpense);
+app.post("/expense/findByUserId",findExpenseByUserId);
+app.delete("/expense/delete",deleteExpenseById);
+app.get("/expense/add",addExpense);
 
 

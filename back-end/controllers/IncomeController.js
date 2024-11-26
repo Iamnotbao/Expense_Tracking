@@ -33,6 +33,7 @@ const createIncome = async (req, res) => {
         amount: amount,
         user: user
     })
+
     await incomes.save();
     console.log(userExist.listIncome);
 
@@ -41,9 +42,36 @@ const createIncome = async (req, res) => {
     await userExist.save();
     res.json(userExist)
 }
-//Delete {func deleteIncome, {id}}
+const deleteIncome = async (req, res) =>  {
+    //func deleteIncome, {id}
+    const {userID , idIncome} =  req.body;
+    const userExist = await User.findOne({ _id: userID });
 
-// Update{func deleteIncome, {id,newIncome}}
+    const newlist =[];
+
+    const result = userExist.listIncome.forEach((item)=>{
+                if(!(item.income.equals(idIncome))){
+                    newlist.push(item);  
+                }
+
+    });
+
+    userExist.listIncome = newlist;
+    
+    res.json(userExist.listIncome);
+    
+     await userExist.save();
+}
 
 
-module.exports = { getAllincome, createIncome }
+
+const Update = async (req, res) =>{
+
+  const {userID } =  req.body;
+  const { username, password, email, phone, address } = req.body;
+  const user = await User.findOne({ _id: userID });
+
+}
+
+
+module.exports = { getAllincome, createIncome, deleteIncome}
