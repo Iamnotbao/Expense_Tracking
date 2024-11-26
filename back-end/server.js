@@ -39,9 +39,9 @@ app.delete("/income/delete",AuthController,deleteIncome);
 
 //expense
 
-app.post("/expense/findAll",findAllExpense);
-app.post("/expense/findByUserId",findExpenseByUserId);
-app.delete("/expense/delete",deleteExpenseById);
-app.get("/expense/add",addExpense);
+app.get("/expense",findAllExpense);
+app.post("/expense",findExpenseByUserId);
+app.delete("/expense",deleteExpenseById);
+app.post("/expense/add",addExpense);
 
 

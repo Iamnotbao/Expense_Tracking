@@ -67,9 +67,12 @@ const deleteIncome = async (req, res) =>  {
 
 const Update = async (req, res) =>{
 
-  const {userID } =  req.body;
-  const { username, password, email, phone, address } = req.body;
+    const {userID , idIncome} =  req.body;
+ 
   const user = await User.findOne({ _id: userID });
+
+
+  
 
 }
 
