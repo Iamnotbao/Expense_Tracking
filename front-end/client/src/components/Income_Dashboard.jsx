@@ -13,7 +13,7 @@ const Income_DashBoard = () => {
     const [selectedIncome, setSelectedIncome] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
         //  console.log("select",select);
-    // console.log("mulple",selectedIncome);
+    console.log("mulple",selectedIncome);
     const handleDelete = async () => {
         //event.preventDefault();
         let deleteIncome = {
