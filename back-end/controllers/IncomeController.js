@@ -18,16 +18,16 @@ const getAllincome = async (req, res) => {
         console.log(err);
 
     }
-
-
-
 }
 const createIncome = async (req, res) => {
     const { userID, nameIncome, amount } = req.body;
 
     const userExist = await User.findOne({ _id: userID });
+    
+    if(!userExist){
+        return;
+    }
     console.log(userExist);
-
     const incomes = new Income({
         nameIncome: nameIncome,
         amount: amount,
@@ -42,9 +42,31 @@ const createIncome = async (req, res) => {
     await userExist.save();
     res.json(userExist)
 }
+const createIncomeByUserName = async (req, res) => {
+    const { userName, nameIncome, amount } = req.body;
+
+    const userExist = await User.findOne({ username: userName});
+    if(!userExist){
+        return;
+    }
+    console.log(userExist);
+
+    const incomes = new Income({
+        nameIncome: nameIncome,
+        amount: amount,
+        user: userExist._id,
+    })
+
+    await incomes.save();
+    console.log("Create",userExist.listIncome);
+
+
+    userExist.listIncome.push({ income: incomes._id });
+    await userExist.save();
+    res.json(userExist)
+}
 const deleteIncome = async (req, res) => {
     console.log("ok");
-    
     //func deleteIncome, {id}
     const { userID } = req.body;
     const userExist = await User.findOne({ _id: userID });
@@ -59,7 +81,6 @@ const deleteIncome = async (req, res) => {
            const response = await Income.deleteOne({_id:req.params.id})
            if(response.data){
             console.log("ok");
-            
            }else{
             console.log("no");
            }  
@@ -101,4 +122,4 @@ const UpdateIncome = async (req, res) => {
 };
 
 
-module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome }
+module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome,createIncomeByUserName }

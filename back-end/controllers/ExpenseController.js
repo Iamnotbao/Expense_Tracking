@@ -1,23 +1,47 @@
 const { model } = require('mongoose');
 const Expense = require('../models/expense');
-const User= require('../models/users');
+const User = require('../models/users');
 // lấy tất cả expense
 const findAllExpense = async (req, res) => {
     let expenses;
-    expenses = Expense.find({}).then(expenses => {
-        console.log(expenses);
+    expenses = Expense.find({}).populate('user').then(expenses => {
+        // console.log(expenses);
         res.json(expenses);
     }).catch(error => {
         console.log(error);
+        res.status(500).send({
+            message: 'Error retrieving expenses',
+            error: error.message
+        });
     });
-    console.log(expenses);
+    //console.log(expenses);
+}
+//
+const UpdateExpense=async (req, res)=>{
+    try {
+        const { expenseId, category, amount, description, paymentMethod, location } = req.body
+        const result = await Expense.findOne({ _id: expenseId })
+        result.category = category;
+        result.amount = amount;
+        result.description = description;
+        result.paymentMethod = paymentMethod,
+            result.location = location
+        result.updatedAt = new Date();
+        res.json(result);
+        await result.save();
+    } catch (err) {
+        res.status(500).send({
+            message: 'Error editing expense',
+            error: err.message,
+        });
+    }
 }
 
 //tìm expense bằng UserId
-async function findExpenseByUserId(req,res) {
+const findExpenseByUserId= async (req, res)=> {
     try {
-        const userId = req.params.id;
-        const expenses = await Expense.find({ userId:  userId });
+        const user = req.params.id;
+        const expenses = await Expense.find({ userId: userId });
         if (expenses.length > 0) {
             console.log('Expenses found:', expenses);
             res.json(expenses);
@@ -29,40 +53,73 @@ async function findExpenseByUserId(req,res) {
         console.error('Error finding expense:', error);
     }
 }
-    //xóa expense bằng ID
-    // chưa test thử
-async function deleteExpenseById(req,res) {
+//xóa expense bằng ID
+// chưa test thử
+const deleteExpenseById = async (req, res) =>{
     try {
-        const ID= req.params.ID;
-        const result = await Expense.deleteOne({ _id: ID })
-        if (result) {
-            console.log("deleted");
-        } else {
-            console.log("not found");
+        //func deleteExpenseById, {id}
+        const { userID } = req.body;
+        const userExist = await User.findOne({ _id: userID });
+        if (!userExist) {
+            return res.status(404).send({ message: "User not found" });
         }
-    } catch (error) {
-        console.log(error);
+        const newlist = [];
+       
+        const result = userExist.listExpense.forEach(async (item) => {
+            if (!(item.expense.equals(req.params.id))) {
+                newlist.push(item);
+            }
+            else {
+                const response = await Expense.deleteOne({ _id: req.params.id })
+                if (response.data) {
+                    console.log("ok");
+                } else {
+                    console.log("no");
+                }
+            }
+        });
+
+        userExist.listExpense = newlist;
+        res.json(userExist);
+        await userExist.save();
+        console.log("expense delete successfully");
+      
+        
+    } catch (err) {
+        res.status(500).send({
+            message: 'Error delete expense',
+            error: err.message
+        });
     }
 }
 // thêm expense
 const addExpense = async (req, res) => {
-    let expense = Expense;
     //đây là demo add
-    let user= await User.findOne({username : "huy"});
-    const newExpense = new Expense({
-        userId: user._id,
-        category: 'Food',
-        amount: 50,
-        description: 'Dinner at restaurant',
-        paymentMethod: 'Credit Card',
-        recurring: false,
-        location: 'Downtown',
-        paymentDate: new Date()
-    });
     try {
+        const { username, category, amount, description, paymentMethod, location } = req.body;
+        //console.log('Received Data:', { username, category, amount, description, paymentMethod, location });
+        let user = await User.findOne({ username: username });
+        const newExpense = new Expense({
+            user: user._id,
+            category: category,
+            amount: amount,
+            description: description,
+            paymentMethod: paymentMethod,
+            location: location,
+            paymentDate: new Date()
+        });
+
         const saveExpense = newExpense.save();
+        user.listExpense.push({ expense: newExpense._id });
+        await user.save();
+
+        return res.json(user)
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            message: 'Error adding expense',
+            error: error.message
+        });
     }
 }
-    module.exports={addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById}
+module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios"
 import "../components/CSS/Income.css"
-
 const Income_DashBoard = () => {
     const [income, setIncome] = useState([]);
     const baseURL = "http://localhost:5000/income"
@@ -13,9 +12,10 @@ const Income_DashBoard = () => {
     const [newAdd, setNewAdd] = useState(null);
     const [selectedIncome, setSelectedIncome] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
-    const handleDelete = async (event) => {
-        event.preventDefault();
-
+        //  console.log("select",select);
+    // console.log("mulple",selectedIncome);
+    const handleDelete = async () => {
+        //event.preventDefault();
         let deleteIncome = {
             userID: select.user._id,
         };
@@ -42,7 +42,7 @@ const Income_DashBoard = () => {
 
     const handleEdit = async (event) => {
 
-        event.preventDefault();
+      // event.preventDefault();
 
 
         let newEdit = {
@@ -63,12 +63,10 @@ const Income_DashBoard = () => {
 
         } catch (error) {
             console.log(error);
-
         }
     }
 
     const handleAddPopUp = () => {
-
         setAdd(true);
     };
     const handleEditPopUp = (income) => {
@@ -101,6 +99,31 @@ const Income_DashBoard = () => {
         }
         setSelectAll(!selectAll); 
     }
+    const handleAdd = async (event) => {
+       // event.preventDefault();
+        try {
+            let newIncome = {
+                nameIncome: event.target.nameIncome.value,
+                amount: event.target.amount.value,
+                userName: event.target.userName.value,
+            }
+            console.log(`${baseURL}/create/${newIncome.userName}`);
+            const response = await axios.post(`${baseURL}/create/${newIncome.userName}`, newIncome, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                },
+            })
+            if (response.data) {
+                console.log(response.data);
+                handleCancle();
+            }else{
+                console.log("not found");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -148,7 +171,8 @@ const Income_DashBoard = () => {
                                     <th>STT</th>
                                     <th>Income Name</th>
                                     <th>Amount</th>
-                                    <th>Author</th>
+                                    <th>User Name</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,12 +224,16 @@ const Income_DashBoard = () => {
                 <div id="addModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form onSubmit={handleAdd}>
+                            <form  onSubmit={handleAdd}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Add Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" onClick={handleCancle}>&times;</button>
                                 </div>
                                 <div className="modal-body">
+                                <div className="form-group">
+                                        <label>userName Name</label>
+                                        <input type="text" name="userName" className="form-control" required />
+                                    </div>
                                     <div className="form-group">
                                         <label>Income Name</label>
                                         <input type="text" name="nameIncome" className="form-control" required />
@@ -226,8 +254,6 @@ const Income_DashBoard = () => {
             )}
 
             {edit && (
-
-
 
                 <div id="editModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
@@ -272,7 +298,7 @@ const Income_DashBoard = () => {
                                 </div>
                                 <div className="modal-footer">
                                     <input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel" onClick={handleCancle} />
-                                    <input type="submit" className="btn btn-danger" value="Delete" />
+                                    <input type="submit" className="btn btn-danger" value="Delete"  />
                                 </div>
                             </form>
                         </div>

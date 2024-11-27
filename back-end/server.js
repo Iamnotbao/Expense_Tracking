@@ -2,10 +2,10 @@
 const {database} = require("./config/db");
 const express = require("express");
 const { getAllUser, loginUser, registeredUser } = require("./controllers/UserController");
-const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById} =require("./controllers/ExpenseController");
+const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById, UpdateExpense} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
-const { getAllincome, createIncome, deleteIncome, UpdateIncome } = require("./controllers/IncomeController");
+const { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName } = require("./controllers/IncomeController");
 const { AuthController } = require("./controllers/AuthController");
 const app = express();
 
@@ -35,14 +35,17 @@ app.post("/signup",registeredUser);
 //income
 app.get("/income",AuthController,getAllincome);
 app.post("/income/create",AuthController,createIncome);
+app.post("/income/create/:username",AuthController,createIncomeByUserName);
+
 app.delete("/income/:id",AuthController,deleteIncome);
 app.put("/income/:id",AuthController,UpdateIncome);
 
 //expense
 
-app.get("/expense",findAllExpense);
-app.post("/expense",findExpenseByUserId);
-app.delete("/expense",deleteExpenseById);
-app.post("/expense/add",addExpense);
+app.get("/expense",AuthController,findAllExpense);
+app.post("/expense",AuthController,findExpenseByUserId);
+app.put("/expense/:id",AuthController,UpdateExpense);
+app.delete("/expense/:id",AuthController,deleteExpenseById);
+app.post("/expense/create",AuthController,addExpense);
 
 

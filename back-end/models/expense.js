@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 
 const expenseSchema = new mongoose.Schema({
-    userId: { 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+    user: {
+        type:mongoose.Schema.ObjectId,
+        ref :"users",
+        require: true,
     },
     category: String,
     amount: Number,
     description: String,
     paymentMethod: String,
-    recurring: { type: Boolean, default: false },
     location: String,
     paymentDate: { type: Date, default: new Date() }
 }, { timestamps: true });
