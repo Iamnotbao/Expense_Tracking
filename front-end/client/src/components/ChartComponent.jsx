@@ -1,12 +1,38 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect } from 'react';
 import { Chart } from 'chart.js';
+import axios from 'axios';
 
 const ChartComponent = () => {
     const chartRef = useRef(null); // Sử dụng useRef để tạo tham chiếu đến canvas element
     const chartInstanceRef = useRef(null);
+    const baseURL = "http://localhost:5000/expense";
+    const token = sessionStorage.getItem("token");
+    const [loading,setLoading] = useState(false);
+    const [expense, setExpense] = useState([]);
+    console.log("check",expense);
+    
     
 
-   
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(baseURL, {
+                    headers: {
+                        "Authorization": `Bearer ${JSON.parse(token)}`
+                    }
+                })
+
+                if (response.data) {
+                    setLoading(true);
+                    setExpense(response.data);
+                }
+            } catch (error) {
+                console.log(error);
+
+            }
+        }
+        fetchData();
+    }, [])
     useEffect(() => {
 
         const data = [
@@ -52,7 +78,7 @@ const ChartComponent = () => {
                 chartInstanceRef.current = null;
             }
         };
-    }, []);
+    }, [loading==true]);
 
     return <canvas ref={chartRef} id="acquisitions"></canvas>;
 };
