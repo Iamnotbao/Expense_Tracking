@@ -94,6 +94,25 @@ const deleteIncome = async (req, res) => {
 
     await userExist.save();
 }
+const  DeleteMultipleIncome = async(req,res) =>{
+
+    const { listIncome , userID} = req.boby
+
+    const userExist = await User.findOne({ _id: userID });
+
+    for( const income of listIncome ){
+
+            userExist.listIncome.deleteOne({_id : income._id});
+            const response = await Income.deleteOne({_id : income._id})
+
+    }
+
+    await userExist.save();
+
+}
+
+
+
 
 
 
