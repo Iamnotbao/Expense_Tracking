@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    balance:  {
+    balance: {
         type: Number,
         default: 0
     },
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
-    
+
 
 
 })

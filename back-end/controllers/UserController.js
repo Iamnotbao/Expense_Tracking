@@ -54,8 +54,8 @@ const registeredUser = async (req, res) => {
       console.log("this user is create", user);
       await user.save();
       return res.status(200).json({
-        success:true,
-        message:"User has been add !!!"
+        success: true,
+        message: "User has been add !!!"
       })
     } else {
       return res.status(401).json({
@@ -79,19 +79,19 @@ const loginUser = async (req, res) => {
       message: "Doesn't have this user!!!"
     })
   }
-  if(password){
+  if (password) {
     const existUser = await ComparedPassword(password, user.password);
-    if(existUser){
-      const client = {userId : user._id, username: user.username};
-      const token = jwt.sign(client,process.env.ACCESS_TOKEN);
+    if (existUser) {
+      const client = { userId: user._id, username: user.username };
+      const token = jwt.sign(client, process.env.ACCESS_TOKEN);
       return res.status(200).json({
-        message:true,
-        username:user.username,
-        userID:user._id,
-        accessToken:token
+        message: true,
+        username: user.username,
+        userID: user._id,
+        accessToken: token
       })
     }
-   
+
   }
 }
 
@@ -116,7 +116,7 @@ async function Budget(userID) {
     const expense = await Expense.findOne({ _id: item.expense })
     total -= expense.amount;
   }
- 
+
   return total;
 }
 
@@ -128,18 +128,18 @@ async function NotificationBudget(req, res) {
   if (totalimo < 0) {
     return res.status(401).json({
       message: " Over budget ",
-       totalimo: totalimo
+      totalimo: totalimo
     }
     );
   } else {
     const user = await User.findOne({ _id: userID });
-   // console.log("check balance",user.balance);
+    // console.log("check balance",user.balance);
     user.balance = totalimo;
     await user.save();
     return res.status(200).json({
-      message : " valid budget ",
-      success : true,
-     totalimo : totalimo
+      message: " valid budget ",
+      success: true,
+      totalimo: totalimo
     });
   }
 }

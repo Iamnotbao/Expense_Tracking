@@ -17,7 +17,7 @@ const findAllExpense = async (req, res) => {
     //console.log(expenses);
 }
 //
-const UpdateExpense=async (req, res)=>{
+const UpdateExpense = async (req, res) => {
     try {
         const { expenseId, category, amount, description, paymentMethod, location } = req.body
         const result = await Expense.findOne({ _id: expenseId })
@@ -38,7 +38,7 @@ const UpdateExpense=async (req, res)=>{
 }
 
 //tìm expense bằng UserId
-const findExpenseByUserId= async (req, res)=> {
+const findExpenseByUserId = async (req, res) => {
     try {
         const user = req.params.id;
         const expenses = await Expense.find({ userId: userId });
@@ -55,7 +55,7 @@ const findExpenseByUserId= async (req, res)=> {
 }
 //xóa expense bằng ID
 // chưa test thử
-const deleteExpenseById = async (req, res) =>{
+const deleteExpenseById = async (req, res) => {
     try {
         //func deleteExpenseById, {id}
         const { userID } = req.body;
@@ -64,7 +64,7 @@ const deleteExpenseById = async (req, res) =>{
             return res.status(404).send({ message: "User not found" });
         }
         const newlist = [];
-       
+
         const result = userExist.listExpense.forEach(async (item) => {
             if (!(item.expense.equals(req.params.id))) {
                 newlist.push(item);
@@ -83,8 +83,8 @@ const deleteExpenseById = async (req, res) =>{
         res.json(userExist);
         await userExist.save();
         console.log("expense delete successfully");
-      
-        
+
+
     } catch (err) {
         res.status(500).send({
             message: 'Error delete expense',
@@ -97,7 +97,7 @@ const addExpense = async (req, res) => {
     //đây là demo add
     try {
         const { username, category, amount, description, paymentMethod, location } = req.body;
-       
+
         let user = await User.findOne({ username: username });
         const newExpense = new Expense({
             user: user._id,

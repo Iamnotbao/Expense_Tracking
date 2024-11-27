@@ -4,8 +4,8 @@ const IncomeSchema = new mongoose.Schema({
     nameIncome: String,
     amount: Number,
     user: {
-        type:mongoose.Schema.ObjectId,
-        ref :"users",
+        type: mongoose.Schema.ObjectId,
+        ref: "users",
         require: true,
     }
 
