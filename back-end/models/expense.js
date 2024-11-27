@@ -11,6 +11,8 @@ const expenseSchema = new mongoose.Schema({
     description: String,
     paymentMethod: String,
     location: String,
+    month: Number,
+    Year: Number,
     paymentDate: { type: Date, default: new Date() }
 }, { timestamps: true });
 const Expense = mongoose.model('expense', expenseSchema);

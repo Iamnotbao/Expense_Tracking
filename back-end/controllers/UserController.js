@@ -1,5 +1,8 @@
 
 const User = require("../models/users.js");
+const Income = require("../models/incomes.js");
+const Expense = require("../models/expense.js");
+
 const { HashPassword, ComparedPassword } = require("../service/HashPassword.js");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
@@ -95,8 +98,7 @@ const loginUser = async (req, res) => {
   }
 }
 
-//Budget
-//Notification Budget
+
 //Tax Deduction
 //transfer to PDF 
 //Profile
@@ -143,6 +145,84 @@ async function NotificationBudget(req, res) {
     });
   }
 }
+async function taxDeduction(req, res) {
+
+  const { userID } = req.body;
+  const user = await User.findOne({ _id: userID });
+  Budget(userID);
+  let total = user.balance;
+
+  const taxTable = new  Map();
+  const array =  [];
+
+  array.push(0);
+  array.push(5000000);
+  array.push(10000000);
+  array.push(18000000);
+  array.push(32000000);
+  array.push(52000000);
+  array.push(80000000);
+
+  taxTable.set(0, 0.0);
+  taxTable.set(5000000, 0.05);
+  taxTable.set(10000000, 0.1);
+  taxTable.set(18000000, 0.15);
+  taxTable.set(32000000, 0.2);
+  taxTable.set(52000000, 0.25);
+  taxTable.set(80000000, 0.3);
+
+
+  let taxTableIncome = total - 11000000*12 - 1500000*12;
+  let taxIncome = 0;
+
+  if (taxTableIncome > 0) {
+    for (let index = 1; index < array.length; index++) {
+
+      taxIncome = taxIncome + (Math.min((array[index] - array[index-1]), taxTableIncome) * taxTable.get(array[index]))
+
+      taxTableIncome = taxTableIncome - (array[index] - array[index - 1])
+
+      taxTableIncome = Math.max(taxTableIncome,0)
+
+    }
+  }
+  console.log(taxIncome);
+
+  return res.status(200).json({
+    success: true,
+    taxIncome
+  });
+
+
+}
+
+
+  async function tableUser_expense(req, res){
+
+    const  outlist = [];
+
+    const re = await User.find()
+    
+    for await (const userOut of re) {
+      if(userOut.listExpense.length > 0){
+        outlist.push(userOut);
+      } 
+    }
+      
+    return res.status(200).json({
+      message: " valid budget ",
+      success: true,
+      outlist
+    });
+
+  }
+
+
+
+
+
+
+
 
 
 module.exports = {
@@ -150,4 +230,6 @@ module.exports = {
   loginUser,
   registeredUser,
   NotificationBudget,
+  tableUser_expense,
+  taxDeduction,
 }

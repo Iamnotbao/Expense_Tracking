@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const IncomeSchema = new mongoose.Schema({
     nameIncome: String,
     amount: Number,
+    month: Number,
+    Year: Number,
     user: {
         type: mongoose.Schema.ObjectId,
         ref: "users",

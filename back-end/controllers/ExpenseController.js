@@ -96,9 +96,9 @@ const deleteExpenseById = async (req, res) => {
 const addExpense = async (req, res) => {
     //đây là demo add
     try {
-        const { username, category, amount, description, paymentMethod, location } = req.body;
+        const { username, category, amount, description, paymentMethod, location ,month, year } = req.body;
 
-        let user = await User.findOne({ username: username });
+        let user = await User.findOne({_id: username });
         const newExpense = new Expense({
             user: user._id,
             category: category,
@@ -106,6 +106,8 @@ const addExpense = async (req, res) => {
             description: description,
             paymentMethod: paymentMethod,
             location: location,
+            month : month,
+            year : year,
             paymentDate: new Date()
         });
 
@@ -122,4 +124,20 @@ const addExpense = async (req, res) => {
         });
     }
 }
+const  DeleteMultipleIncome = async(req,res) => {
+
+    const { listExpense , userID} = req.boby
+
+    const userExist = await User.findOne({ _id: userID });
+
+    for( const expense of listExpense ){
+            userExist.listExpense.deleteOne({_id : expense._id});
+            const response = await Expense.deleteOne({_id : expense._id})
+    }
+
+    await userExist.save();
+
+}
+
+
 module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense }
