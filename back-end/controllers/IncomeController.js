@@ -102,7 +102,6 @@ const UpdateIncome = async (req, res) => {
     const { idIncome ,nameIncome, amount} = req.body;
     console.log(idIncome);
     
-
     //const user = await User.findOne({ _id: userID });
 
     const result = await Income.findOne({_id:idIncome})

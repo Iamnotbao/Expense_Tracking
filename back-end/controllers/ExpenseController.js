@@ -97,7 +97,7 @@ const addExpense = async (req, res) => {
     //đây là demo add
     try {
         const { username, category, amount, description, paymentMethod, location } = req.body;
-        //console.log('Received Data:', { username, category, amount, description, paymentMethod, location });
+       
         let user = await User.findOne({ username: username });
         const newExpense = new Expense({
             user: user._id,

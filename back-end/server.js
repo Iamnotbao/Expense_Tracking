@@ -28,10 +28,6 @@ app.post("/signin",loginUser);
 app.post("/signup",registeredUser);
 
 
-
-
-
-
 //income
 app.get("/income",AuthController,getAllincome);
 app.post("/income/create",AuthController,createIncome);

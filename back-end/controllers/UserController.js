@@ -92,6 +92,9 @@ const loginUser = async (req, res) => {
       })
     }
    
+  }
+}
+
 //Budget
 //Notification Budget
 //Tax Deduction
@@ -99,10 +102,52 @@ const loginUser = async (req, res) => {
 //Profile
 
 
+
+async function Budget(userID) {
+  const user = await User.findOne({ _id: userID });
+  let total = 0;
+
+  for (const item of user.listIncome) {
+    const income = await Income.findOne({ _id: item.income })
+    total += income.amount;
+  }
+
+  for (const item of user.listExpense) {
+    const expense = await Expense.findOne({ _id: item.expense })
+    total -= expense.amount;
+  }
+ 
+  return total;
+}
+
+async function NotificationBudget(req, res) {
+
+  const { userID } = req.body;
+  const totalimo = await Budget(userID);
+  console.log(totalimo);
+  if (totalimo < 0) {
+    return res.status(401).json({
+      message: " Over budget ",
+       totalimo: totalimo
+    }
+    );
+  } else {
+    const user = await User.findOne({ _id: userID });
+   // console.log("check balance",user.balance);
+    user.balance = totalimo;
+    await user.save();
+    return res.status(200).json({
+      message : " valid budget ",
+      success : true,
+     totalimo : totalimo
+    });
   }
 }
+
+
 module.exports = {
   getAllUser,
   loginUser,
-  registeredUser
+  registeredUser,
+  NotificationBudget,
 }
