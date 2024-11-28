@@ -4,6 +4,19 @@
     flex-grow: 1;
     margin: 10px;
 }
+.chart {
+     max-width: 100%;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;   
+     height: 300px;
+}
+.chart > .child-chart{
+    line-height: 400px;
+    width: 100%;
+}
+
 .numberAndChart{
     flex: 1;
     padding: 15px;
@@ -12,7 +25,10 @@
 .infoTable{
     flex: 1;
     padding: 15px;
-    height: 100vh;
+    line-height: 100vh;
+    flex-direction: column;
+    display: flex;
+
 }
 .numberBlock{
     display: flex;
@@ -32,12 +48,13 @@
     padding: 10px;
 }
 .expenseTable{
-    height: 40vh;
+    height: 30vh;
     overflow-y: auto;
 }
 .incomeTable{
     height: 40vh;
     overflow-y: auto;
+    margin-bottom: 20px;
 }
 .buttonGroup{
     display: flex;

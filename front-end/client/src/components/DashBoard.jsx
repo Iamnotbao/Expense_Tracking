@@ -51,98 +51,115 @@ const DashBoard = () => {
     }, [income, expense]);
 
     return (
-        <div className="dashBoardScreen">
-            <div className="numberAndChart">
-                <div className="numberBlock">
-                    <div className="infoBlock" style={{ backgroundColor: "#E6FAFE" }}>
-                        <p>Current Balance</p>
-                        <h1>3000 vnđ</h1>
-                    </div>
-                    <div className="infoBlock" style={{ backgroundColor: "#F7EFFF" }}>
-                        <p>Total Income</p>
-                        <h1>3000 vnđ</h1>
-                    </div>
-                    <div className="infoBlock" style={{ backgroundColor: "#E6FAFE" }}>
-                        <p>Total Expenses</p>
-                        <h1>3000 vnđ</h1>
+        <div className="dashBoardScreen container-fluid">
+            <div className="row">
+                <div className="col-md-6 left-col">
+                    <div className="numberAndChart">
+                        <div className="numberBlock">
+                            <div className="infoBlock" style={{ backgroundColor: "#E6FAFE" }}>
+                                <p>Current Balance</p>
+                                <h1>3000 vnđ</h1>
+                            </div>
+                            <div className="infoBlock" style={{ backgroundColor: "#F7EFFF" }}>
+                                <p>Total Income</p>
+                                <h1>3000 vnđ</h1>
+                            </div>
+                            <div className="infoBlock" style={{ backgroundColor: "#E6FAFE" }}>
+                                <p>Total Expenses</p>
+                                <h1>3000 vnđ</h1>
+                            </div>
+                        </div>
+                        <div className="chart row">
+                            <div className="col-md-6">
+                                <ChartComponent Income={income.income} Expense={expense.expense} />
+                             
+                            </div>
+                            <div className="col-md-6">
+                                <ChartComponent Income={income.income} Expense={expense.expense} />
+                               
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
-                <div className="chart">
-                    <ChartComponent Income={income.income} Expense={expense.expense}/>
-
-                </div>
-            </div>
-            <div className="infoTable">
-                <h1>this is table</h1>
-                <div className="expenseTable">
-                    <table className="table">
-                        <thead className="table-dark">
-                            <tr>
-                                <th scope="col">Index</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Location</th>
-                                <th scope="col">Payment Method</th>
-                                <th scope="col">Payment Date</th>
-                                <th> action</th>
-                            </tr>
-                        </thead>
-                        {
-                            expense.length !== 0 &&
-                            expense.map((item, index) => (
-
-                                <tbody key={index}>
+                <div className="col-md-6 right-col">
+                    <div className="infoTable">
+                        <h1>this is table</h1>
+                        <div className="expenseTable">
+                            <table className="table">
+                                <thead className="table-dark">
                                     <tr>
-                                        <td scope="row">{index + 1}</td>
-                                        <td>{item.expense.category}</td>
-                                        <td style={{ overflowX: 'auto' }}>{item.expense.description}</td>
-                                        <td>{item.expense.location}</td>
-                                        <td>{item.expense.paymentMethod}</td>
-                                        <td>{item.expense.paymentDate}</td>
-                                        <td className="buttonGroup">
-                                            <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                        </td>
+                                        <th scope="col">Index</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Payment Method</th>
+                                        <th scope="col">Payment Date</th>
+                                        <th> action</th>
                                     </tr>
+                                </thead>
+                                {
+                                    expense.length !== 0 &&
+                                    expense.map((item, index) => (
 
-                                </tbody>
+                                        <tbody key={index}>
+                                            <tr>
+                                                <td scope="row">{index + 1}</td>
+                                                <td>{item.expense.category}</td>
+                                                <td style={{ overflowX: 'auto' }}>{item.expense.description}</td>
+                                                <td>{item.expense.location}</td>
+                                                <td>{item.expense.paymentMethod}</td>
+                                                <td>{item.expense.paymentDate}</td>
+                                                <td className="buttonGroup">
+                                                    <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
 
-                            )
-                            )}
-                    </table>
-                </div>
-                <div className="incomeTable">
-                    <table className="table">
-                        <thead className="table-dark">
-                            <tr>
-                                <th scope="col">index</th>
-                                <th scope="col">Income Name</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        {
-                            income.length !== 0 &&
-                            income.map((item, index) => (
+                                        </tbody>
 
-                                <tbody key={index}>
+                                    )
+                                    )}
+                            </table>
+                        </div>
+                        <div className="incomeTable">
+                            <table className="table">
+                                <thead className="table-dark">
                                     <tr>
-                                        <td scope="row">{index + 1}</td>
-                                        <td>{item.income.nameIncome}</td>
-                                        <td>{item.income.amount}</td>
-                                        <td className="buttonGroup">
-                                            <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                        </td>
+                                        <th scope="col">index</th>
+                                        <th scope="col">Income Name</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Action</th>
                                     </tr>
+                                </thead>
+                                {
+                                    income.length !== 0 &&
+                                    income.map((item, index) => (
 
-                                </tbody>
+                                        <tbody key={index}>
+                                            <tr>
+                                                <td scope="row">{index + 1}</td>
+                                                <td>{item.income.nameIncome}</td>
+                                                <td>{item.income.amount}</td>
+                                                <td className="buttonGroup">
+                                                    <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
 
-                            )
-                            )}
-                    </table>
+                                        </tbody>
+
+                                    )
+                                    )}
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
+
+
         </div>
     )
 };
