@@ -1,8 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from 'chart.js/auto';
-import "./CSS/DashBoard.css"
+import "./CSS/DashBoard.css";
 import ChartComponent from "./ChartComponent";
+import axios from "axios";
 const DashBoard = () => {
+    const inforURL = "http://localhost:5000/getIncome";
+    const token = sessionStorage.getItem("token");
+    const [income, setIncome] = useState([]);
+    const [expense, setExpense] = useState([]);
+
+
+    const fetchIncomeData = async () => {
+        const currentID = sessionStorage.getItem("userID");
+        if (!currentID || !token) {
+            console.error("User ID or token is missing in sessionStorage.");
+            return;
+        } else {
+            console.log("current Id: ", currentID);
+        }
+
+        try {
+            const response = await axios.get(`${inforURL}/${currentID}`, {
+                headers: {
+                    "Authorization": `Bearer ${JSON.parse(token)}`
+                }
+            });
+
+            if (response.status === 200) {
+                setIncome(response.data.listIncome);
+                setExpense(response.data.listExpense);
+                console.log(income);
+                console.log(expense);
+
+            } else {
+                console.error("No income data found or error response:", response);
+            }
+        } catch (error) {
+            console.error("Error fetching income data:", error);
+        }
+    }
+    useEffect(() => {
+        fetchIncomeData();
+        console.log(income);
+        console.log(expense);
+    }, []);
+
+    useEffect(() => {
+        console.log('Updated Income:', income);
+        console.log('Updated Expense:', expense);
+    }, [income, expense]);
+
     return (
         <div className="dashBoardScreen">
             <div className="numberAndChart">
@@ -21,12 +68,80 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div className="chart">
-                <ChartComponent/>
+                    <ChartComponent Income={income.income} Expense={expense.expense}/>
 
                 </div>
             </div>
-            <div className="table">
+            <div className="infoTable">
                 <h1>this is table</h1>
+                <div className="expenseTable">
+                    <table className="table">
+                        <thead className="table-dark">
+                            <tr>
+                                <th scope="col">Index</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Location</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Payment Date</th>
+                                <th> action</th>
+                            </tr>
+                        </thead>
+                        {
+                            expense.length !== 0 &&
+                            expense.map((item, index) => (
+
+                                <tbody key={index}>
+                                    <tr>
+                                        <td scope="row">{index + 1}</td>
+                                        <td>{item.expense.category}</td>
+                                        <td style={{ overflowX: 'auto' }}>{item.expense.description}</td>
+                                        <td>{item.expense.location}</td>
+                                        <td>{item.expense.paymentMethod}</td>
+                                        <td>{item.expense.paymentDate}</td>
+                                        <td className="buttonGroup">
+                                            <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            )
+                            )}
+                    </table>
+                </div>
+                <div className="incomeTable">
+                    <table className="table">
+                        <thead className="table-dark">
+                            <tr>
+                                <th scope="col">index</th>
+                                <th scope="col">Income Name</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        {
+                            income.length !== 0 &&
+                            income.map((item, index) => (
+
+                                <tbody key={index}>
+                                    <tr>
+                                        <td scope="row">{index + 1}</td>
+                                        <td>{item.income.nameIncome}</td>
+                                        <td>{item.income.amount}</td>
+                                        <td className="buttonGroup">
+                                            <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            )
+                            )}
+                    </table>
+                </div>
             </div>
         </div>
     )

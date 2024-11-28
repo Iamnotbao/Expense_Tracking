@@ -9,7 +9,7 @@
     padding: 15px;
     height: 100vh;
 }
-.table{
+.infoTable{
     flex: 1;
     padding: 15px;
     height: 100vh;
@@ -30,4 +30,16 @@
 .infoBlock h1{
     font-size: 25px;
     padding: 10px;
+}
+.expenseTable{
+    height: 40vh;
+    overflow-y: auto;
+}
+.incomeTable{
+    height: 40vh;
+    overflow-y: auto;
+}
+.buttonGroup{
+    display: flex;
+    flex-direction: row;
 }

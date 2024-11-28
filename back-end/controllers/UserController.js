@@ -192,8 +192,6 @@ async function taxDeduction(req, res) {
     success: true,
     taxIncome
   });
-
-
 }
 
 
@@ -216,7 +214,18 @@ async function taxDeduction(req, res) {
     });
 
   }
+  const GetInfoByUserId = async (req, res) => {
+    const { userID } = req.params;
 
+    const userExist = await User.findOne({ _id:userID }).populate('listIncome.income').populate('listExpense.expense').exec();
+    if (userExist) {
+        console.log("done")
+        return res.json(userExist);
+    } else {
+        console.log("user not found id : " + userID);
+        return res.status(404).json({ error: "User not found" });
+    }
+}
 
 
 
@@ -232,4 +241,5 @@ module.exports = {
   NotificationBudget,
   tableUser_expense,
   taxDeduction,
+  GetInfoByUserId,
 }

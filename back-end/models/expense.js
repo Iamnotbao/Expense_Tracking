@@ -15,5 +15,5 @@ const expenseSchema = new mongoose.Schema({
     Year: Number,
     paymentDate: { type: Date, default: new Date() }
 }, { timestamps: true });
-const Expense = mongoose.model('expense', expenseSchema);
+const Expense = mongoose.model('expenses', expenseSchema);
 module.exports = Expense;

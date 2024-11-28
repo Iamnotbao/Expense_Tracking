@@ -98,7 +98,7 @@ const addExpense = async (req, res) => {
     try {
         const { username, category, amount, description, paymentMethod, location ,month, year } = req.body;
 
-        let user = await User.findOne({_id: username });
+        let user = await User.findOne({username: username });
         const newExpense = new Expense({
             user: user._id,
             category: category,
@@ -140,4 +140,4 @@ const  DeleteMultipleIncome = async(req,res) => {
 }
 
 
-module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense }
+module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense, }

@@ -1,7 +1,6 @@
 const User = require("../models/users.js");
 const Income = require("../models/incomes.js")
-
-
+const mongoose=require("mongoose");
 const getAllincome = async (req, res) => {
     const income = await Income.find({}).populate('user').exec();
     try {
@@ -20,7 +19,7 @@ const getAllincome = async (req, res) => {
     }
 }
 const createIncome = async (req, res) => {
-    const { userID, nameIncome, amount , mounth,year} = req.body;
+    const { userID, nameIncome, amount, mounth, year } = req.body;
 
     const userExist = await User.findOne({ _id: userID });
 
@@ -96,16 +95,16 @@ const deleteIncome = async (req, res) => {
 
     await userExist.save();
 }
-const  DeleteMultipleIncome = async(req,res) =>{
+const DeleteMultipleIncome = async (req, res) => {
 
-    const { listIncome , userID} = req.boby
+    const { listIncome, userID } = req.boby
 
     const userExist = await User.findOne({ _id: userID });
 
-    for( const income of listIncome ){
+    for (const income of listIncome) {
 
-            userExist.listIncome.deleteOne({_id : income._id});
-            const response = await Income.deleteOne({_id : income._id})
+        userExist.listIncome.deleteOne({ _id: income._id });
+        const response = await Income.deleteOne({ _id: income._id })
 
     }
 
@@ -142,4 +141,4 @@ const UpdateIncome = async (req, res) => {
 };
 
 
-module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName }
+module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName,}

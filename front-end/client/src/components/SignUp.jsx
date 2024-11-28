@@ -64,23 +64,26 @@ const Signup = ({ onRotate }) => {
         try {
             const response = await axios.post('http://localhost:5000/signup', data, {
                 headers: {
-                    "Content-Type": "application/json", 
+                    "Content-Type": "application/json",
                 },
             });
-            localStorage.setItem("localUser", JSON.stringify(response.data.session.localUser));
-            console.log(response.data.session.localUser);
-            showAddSuccessfully();
-            navigate("/MainPage");
+            if (response.data) {
+                const user = response.data.user;
+
+                sessionStorage.setItem("user", JSON.stringify(user));
+                // showAddSuccessfully();
+                navigate("/expense_tracking/home");
+            }
         } catch (error) {
-            showAddFail();
+            // showAddFail();
             console.error("Error:", error);
         }
     }
     return (
         <>
-            
 
-            <div className="box" style={{cursor:"pointer"}}>
+
+            <div className="box" style={{ cursor: "pointer" }}>
                 <i style={{ color: "white", fontSize: "20px" }} onClick={onRotate} class="fa-solid fa-arrow-left"></i>
                 <h2 style={{ color: "white", fontSize: "40px", marginBottom: "20px" }}>Sign up</h2>
                 <form action="" method="GET" className="d-flex align-items-center flex-column" onSubmit={handleSubmit}>

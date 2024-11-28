@@ -38,10 +38,10 @@ const Login = () => {
                 const user = response.data.user;
                 const userID = response.data.userID;
                 sessionStorage.setItem("user",JSON.stringify(user));
-                sessionStorage.setItem("userID",JSON.stringify(userID));
+                sessionStorage.setItem("userID",userID);
                 sessionStorage.setItem("token",JSON.stringify(token));
                 console.log(user);
-                navigate("/expense_tracking/home");
+               navigate("/expense_tracking/home");
             }
 
 
