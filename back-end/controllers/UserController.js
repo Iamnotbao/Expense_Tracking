@@ -111,6 +111,8 @@ const loginUser = async (req, res) => {
 
 async function Budget(userID) {
   const user = await User.findOne({ _id: userID });
+  console.log(user);
+  
   let total = 0;
 
   for (const item of user.listIncome) {

@@ -1,8 +1,30 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./CSS/MainPage.css";
 import DashBoard from "./DashBoard";
 import Sidebar from "./Sidebar";
+import axios from "axios";
 const MainPage = () => {
+  const token = localStorage.getItem("token");
+  console.log("check token: ", token);
+  
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try {
+        const response = await axios.get("",{
+          headers:{
+            Authorization:`Bearer ${JSON.parse(token)}`
+          }
+        })
+        console.log("Noti displays here: ",response.data);
+       
+        
+      } catch (error) {
+          console.log(error);
+          
+      }
+    }
+    fetchData();
+  },[])
 
   return (
     <div className="app">

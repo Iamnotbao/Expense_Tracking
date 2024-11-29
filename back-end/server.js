@@ -1,7 +1,7 @@
 
 const {database} = require("./config/db");
 const express = require("express");
-const { getAllUser, loginUser, registeredUser, Tableuser_expense, tableUser_expense, taxDeduction,GetInfoByUserId } = require("./controllers/UserController");
+const { getAllUser, loginUser, registeredUser, Tableuser_expense, tableUser_expense, taxDeduction,GetInfoByUserId, NotificationBudget } = require("./controllers/UserController");
 const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById, UpdateExpense} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
@@ -22,6 +22,8 @@ app.use(cors());
 app.listen(5000,()=>console.log("Server listen at port 5000"));
 //user
 app.get("/users",getAllUser);
+
+app.get("/notification",AuthController,NotificationBudget);
 
 app.post("/signin",loginUser);
 

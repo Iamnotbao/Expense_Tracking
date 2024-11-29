@@ -86,8 +86,9 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div className="col-md-6 right-col">
+                <h1>Manage Balance</h1>
                     <div className="infoTable">
-                        <h1>this is table</h1>
+                     
                         <div className="expenseTable">
                             <table className="table">
                                 <thead className="table-dark">
