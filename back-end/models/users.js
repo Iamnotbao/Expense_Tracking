@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 userSchema.post('save', async function (doc, next) {
     try {
         await doc.populate('listIncome.income');
-        await doc.populate('listIncome.expense');
+        await doc.populate('listExpense.expense');
 
         next();
     } catch (error) {

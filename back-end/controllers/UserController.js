@@ -85,6 +85,9 @@ const loginUser = async (req, res) => {
   if (password) {
     const existUser = await ComparedPassword(password, user.password);
     if (existUser) {
+      
+      user.balance =  await Budget(user._id);
+      user.save();
       const client = { userId: user._id, username: user.username };
       const token = jwt.sign(client, process.env.ACCESS_TOKEN);
       return res.status(200).json({
