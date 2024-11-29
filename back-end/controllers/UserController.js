@@ -85,6 +85,13 @@ const loginUser = async (req, res) => {
   if (password) {
     const existUser = await ComparedPassword(password, user.password);
     if (existUser) {
+
+      const newBan = await Budget(user._id);
+
+      user.balance = newBan;
+
+      user.save();
+
       const client = { userId: user._id, username: user.username };
       const token = jwt.sign(client, process.env.ACCESS_TOKEN);
       return res.status(200).json({
@@ -93,6 +100,8 @@ const loginUser = async (req, res) => {
         userID: user._id,
         accessToken: token
       })
+
+
     }
 
   }
@@ -223,6 +232,21 @@ async function tableUser_expense(req, res) {
 
 
 
+const GetInfoByUserId = async (req, res) => {
+  const { userID } = req.params;
+
+  const userExist = await User.findOne({ _id:userID }).populate('listIncome.income').populate('listExpense.expense').exec();
+  if (userExist) {
+      console.log("done")
+      return res.json(userExist);
+  } else {
+      console.log("user not found id : " + userID);
+      return res.status(404).json({ error: "User not found" });
+  }
+}
+
+
+
 
 
 
@@ -236,4 +260,5 @@ module.exports = {
   NotificationBudget,
   tableUser_expense,
   taxDeduction,
+  GetInfoByUserId
 }
