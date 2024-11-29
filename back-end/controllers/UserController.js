@@ -91,7 +91,8 @@ const loginUser = async (req, res) => {
         message: true,
         username: user.username,
         userID: user._id,
-        accessToken: token
+        accessToken: token,
+        balance:user.balance
       })
     }
 

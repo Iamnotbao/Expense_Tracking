@@ -3,11 +3,13 @@ import Chart from 'chart.js/auto';
 import "./CSS/DashBoard.css";
 import ChartComponent from "./ChartComponent";
 import axios from "axios";
+import Chart_Income from "./Chart_Income";
 const DashBoard = () => {
     const inforURL = "http://localhost:5000/getIncome";
     const token = sessionStorage.getItem("token");
     const [income, setIncome] = useState([]);
     const [expense, setExpense] = useState([]);
+    const balance = sessionStorage.getItem("balance")
 
 
     const fetchIncomeData = async () => {
@@ -58,7 +60,7 @@ const DashBoard = () => {
                         <div className="numberBlock">
                             <div className="infoBlock" style={{ backgroundColor: "#E6FAFE" }}>
                                 <p>Current Balance</p>
-                                <h1>3000 vnđ</h1>
+                                <h1>{balance}$</h1>
                             </div>
                             <div className="infoBlock" style={{ backgroundColor: "#F7EFFF" }}>
                                 <p>Total Income</p>
@@ -75,7 +77,7 @@ const DashBoard = () => {
                              
                             </div>
                             <div className="col-md-6">
-                                <ChartComponent Income={income.income} Expense={expense.expense} />
+                                <Chart_Income Income={income} Expense={expense.expense} />
                                
                             </div>
 

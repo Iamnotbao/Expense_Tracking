@@ -9,7 +9,7 @@ const ChartComponent = (props) => {
     const token = sessionStorage.getItem("token");
     const [loading,setLoading] = useState(false);
     const [expense, setExpense] = useState(props.Expense);
-  //  console.log("check",expense);
+   console.log("check expense",expense);
     
     
 

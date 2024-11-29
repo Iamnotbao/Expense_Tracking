@@ -19,7 +19,7 @@ const getAllincome = async (req, res) => {
     }
 }
 const createIncome = async (req, res) => {
-    const { userID, nameIncome, amount, mounth, year } = req.body;
+    const { userID, nameIncome, amount, month, year } = req.body;
 
     const userExist = await User.findOne({ _id: userID });
 
@@ -30,11 +30,12 @@ const createIncome = async (req, res) => {
     const incomes = new Income({
         nameIncome: nameIncome,
         amount: amount,
-        mounth: mounth,
-        year: year,
+        month: month,
+        Year: year,
         user: userID
     })
-
+    console.log("checking income",incomes);
+    
     await incomes.save();
     console.log(userExist.listIncome);
 
