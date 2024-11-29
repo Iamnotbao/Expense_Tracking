@@ -85,17 +85,13 @@ const loginUser = async (req, res) => {
   if (password) {
     const existUser = await ComparedPassword(password, user.password);
     if (existUser) {
-      
-      user.balance =  await Budget(user._id);
-      user.save();
       const client = { userId: user._id, username: user.username };
       const token = jwt.sign(client, process.env.ACCESS_TOKEN);
       return res.status(200).json({
         message: true,
         username: user.username,
         userID: user._id,
-        accessToken: token,
-        balance:user.balance
+        accessToken: token
       })
     }
 
@@ -103,7 +99,6 @@ const loginUser = async (req, res) => {
 }
 
 
-//Tax Deduction
 //transfer to PDF 
 //Profile
 
@@ -111,20 +106,22 @@ const loginUser = async (req, res) => {
 
 async function Budget(userID) {
   const user = await User.findOne({ _id: userID });
-  console.log(user);
-  
   let total = 0;
 
-  for (const item of user.listIncome) {
-    const income = await Income.findOne({ _id: item.income })
-    total += income.amount;
+  if (user.listIncome.length > 0) {
+    for (const item of user.listIncome) {
+      const income = await Income.findOne({ _id: item.income })
+      total += income.amount;
+    }
   }
 
+
+  if (user.listExpense.length > 0) {
   for (const item of user.listExpense) {
     const expense = await Expense.findOne({ _id: item.expense })
     total -= expense.amount;
   }
-
+  }
   return total;
 }
 
@@ -151,6 +148,7 @@ async function NotificationBudget(req, res) {
     });
   }
 }
+
 async function taxDeduction(req, res) {
 
   const { userID } = req.body;
@@ -158,8 +156,8 @@ async function taxDeduction(req, res) {
   Budget(userID);
   let total = user.balance;
 
-  const taxTable = new  Map();
-  const array =  [];
+  const taxTable = new Map();
+  const array = [];
 
   array.push(0);
   array.push(5000000);
@@ -178,17 +176,17 @@ async function taxDeduction(req, res) {
   taxTable.set(80000000, 0.3);
 
 
-  let taxTableIncome = total - 11000000*12 - 1500000*12;
+  let taxTableIncome = total - 11000000 * 12 - 1500000 * 12;
   let taxIncome = 0;
 
   if (taxTableIncome > 0) {
     for (let index = 1; index < array.length; index++) {
 
-      taxIncome = taxIncome + (Math.min((array[index] - array[index-1]), taxTableIncome) * taxTable.get(array[index]))
+      taxIncome = taxIncome + (Math.min((array[index] - array[index - 1]), taxTableIncome) * taxTable.get(array[index]))
 
       taxTableIncome = taxTableIncome - (array[index] - array[index - 1])
 
-      taxTableIncome = Math.max(taxTableIncome,0)
+      taxTableIncome = Math.max(taxTableIncome, 0)
 
     }
   }
@@ -198,40 +196,31 @@ async function taxDeduction(req, res) {
     success: true,
     taxIncome
   });
+
+
 }
 
 
-  async function tableUser_expense(req, res){
+async function tableUser_expense(req, res) {
 
-    const  outlist = [];
+  const outlist = [];
 
-    const re = await User.find()
-    
-    for await (const userOut of re) {
-      if(userOut.listExpense.length > 0){
-        outlist.push(userOut);
-      } 
+  const re = await User.find()
+
+  for await (const userOut of re) {
+    if (userOut.listExpense.length > 0) {
+      outlist.push(userOut);
     }
-      
-    return res.status(200).json({
-      message: " valid budget ",
-      success: true,
-      outlist
-    });
-
   }
-  const GetInfoByUserId = async (req, res) => {
-    const { userID } = req.params;
 
-    const userExist = await User.findOne({ _id:userID }).populate('listIncome.income').populate('listExpense.expense').exec();
-    if (userExist) {
-        console.log("done")
-        return res.json(userExist);
-    } else {
-        console.log("user not found id : " + userID);
-        return res.status(404).json({ error: "User not found" });
-    }
+  return res.status(200).json({
+    message: " valid budget ",
+    success: true,
+    outlist
+  });
+
 }
+
 
 
 
@@ -247,5 +236,4 @@ module.exports = {
   NotificationBudget,
   tableUser_expense,
   taxDeduction,
-  GetInfoByUserId,
 }

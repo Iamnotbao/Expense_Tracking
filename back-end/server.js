@@ -23,8 +23,6 @@ app.listen(5000,()=>console.log("Server listen at port 5000"));
 //user
 app.get("/users",getAllUser);
 
-app.get("/notification",AuthController,NotificationBudget);
-
 app.post("/signin",loginUser);
 
 app.post("/signup",registeredUser);
@@ -34,6 +32,8 @@ app.get("/tableUser_expense",tableUser_expense);
 app.post("/taxDeduction",taxDeduction);
 
 app.get("/getIncome/:userID",AuthController,GetInfoByUserId);
+
+app.get("/notification",AuthController,NotificationBudget);
 
 
 
