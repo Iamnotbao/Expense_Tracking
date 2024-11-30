@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Chart } from 'chart.js';
 import axios from 'axios';
 
@@ -7,11 +7,11 @@ const ChartComponent = (props) => {
     const chartInstanceRef = useRef(null);
     const baseURL = "http://localhost:5000/expense";
     const token = sessionStorage.getItem("token");
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [expense, setExpense] = useState(props.Expense);
-   console.log("check expense",expense);
-    
-    
+    // console.log("check expense", expense);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -44,31 +44,53 @@ const ChartComponent = (props) => {
             { year: 2015, count: 30 },
             { year: 2016, count: 28 },
         ];
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+
         const filteredExpense = (expense || []).reduce((acc, item) => {
-            if (acc[item.category]) {
-                acc[item.category] += item.amount;
+            // console.log("Item:", item);
+            // console.log("Create At:", item.createdAt);
+            const expenseDate = new Date(item.paymentDate);
+            const expenseYear = expenseDate.getFullYear();
+            const expenseMonth = expenseDate.getMonth() + 1;
+            const expenseDay = expenseDate.getDate();
+            // console.log("Expense Year:", expenseYear);
+            // console.log("Expense Month:", expenseMonth);
+            // console.log("Expense Day:", expenseDay);
+            if (expenseMonth == currentMonth && expenseYear == currentYear) {
+                acc[expenseDay] += item.amount;
             } else {
-                acc[item.category] = item.amount;
+                acc[expenseDay ] = item.amount;
             }
             return acc;
         }, {});
-        const formattedExpense = Object.keys(filteredExpense).map(category => ({
-            Category: category,
-            Amount: filteredExpense[category],
+        const formattedExpense = Object.keys(filteredExpense).map(expenseDay => ({
+            Date: expenseDay,
+            Amount: filteredExpense[expenseDay],
         }));
-            console.log("chart array ",formattedExpense);
-       
-            if (formattedExpense.length === 0) return;
+        // console.log("chart array ", formattedExpense);
+        const expensesForCurrentMonth = [];
+        for (let day = 1; day <= new Date(currentYear, currentMonth, 0).getDate(); day++) {
+            expensesForCurrentMonth.push({
+                Date: day,
+                Amount: filteredExpense[day] || 0,
+            });
+        }
+        
+       // console.log("Chart array:", expensesForCurrentMonth);
+
+        if (expensesForCurrentMonth.length === 0) return;
 
 
-        chartInstanceRef.current= new Chart(chartRef.current, {
+        chartInstanceRef.current = new Chart(chartRef.current, {
             type: 'bar',
             data: {
-                labels: formattedExpense.map(row => row.Category),
+                labels: expensesForCurrentMonth.map(row => row.Date),
                 datasets: [
                     {
                         label: 'Expenses by Year',
-                        data: formattedExpense.map(row => row.Amount),
+                        data: expensesForCurrentMonth.map(row => row.Amount),
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
@@ -93,7 +115,7 @@ const ChartComponent = (props) => {
                 chartInstanceRef.current = null;
             }
         };
-    }, [loading==true]);
+    }, [loading == true]);
 
     return <canvas ref={chartRef} id="acquisitions"></canvas>;
 };
