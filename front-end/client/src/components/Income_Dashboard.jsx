@@ -3,7 +3,7 @@ import axios from "axios"
 import "../components/CSS/Income.css"
 const Income_DashBoard = () => {
     const [income, setIncome] = useState([]);
-    const baseURL = "http://localhost:5000/income"
+    const baseURL = "http://localhost:5000/income";
     const token = sessionStorage.getItem("token");
     const [add, setAdd] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -41,10 +41,7 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-
       // event.preventDefault();
-
-
         let newEdit = {
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,

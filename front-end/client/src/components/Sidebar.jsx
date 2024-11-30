@@ -16,8 +16,6 @@ const Sidebar =()=>{
           <li><a href=""><i className="bi bi-bell-fill"></i> NOTIFICATION</a></li>
           <li><a href="/expense_tracking/home/share_table"><i className="bi bi-gear-fill"></i> SHARING EXPENSES</a></li>
           <li><a href=""><i className="bi bi-gear-fill"></i> SETTING</a></li>
-          
-          
         </ul>
       </div>
     

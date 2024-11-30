@@ -89,7 +89,7 @@ const ChartComponent = (props) => {
                 labels: expensesForCurrentMonth.map(row => row.Date),
                 datasets: [
                     {
-                        label: 'Expenses by Year',
+                        label: 'Expenses by Month',
                         data: expensesForCurrentMonth.map(row => row.Amount),
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',

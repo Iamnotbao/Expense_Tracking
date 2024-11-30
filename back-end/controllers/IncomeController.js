@@ -122,11 +122,19 @@ const UpdateIncome = async (req, res) => {
 
     const { idIncome, nameIncome, amount } = req.body;
     console.log(idIncome);
+  // Print values to console
+  console.log('idIncome:', idIncome);
+  console.log('nameIncome:', nameIncome);
+  console.log('amount:', amount);
 
     //const user = await User.findOne({ _id: userID });
-
-    const result = await Income.findOne({ _id: idIncome })
-
+    
+    const result = await Income.findOne({ _id: idIncome})
+    if (!result) {
+        // If no document is found, return a 404 response
+        console.log(`Income record with ID ${idIncome} not found.`);
+        return res.status(404).json({ error: 'Income record not found' });
+      }
     result.nameIncome = nameIncome;
     result.amount = amount;
 

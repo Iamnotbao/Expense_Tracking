@@ -43,7 +43,7 @@ const Login = () => {
                 sessionStorage.setItem("user",JSON.stringify(user));
                 sessionStorage.setItem("userID",userID);
                 sessionStorage.setItem("token",JSON.stringify(token));
-                sessionStorage.setItem("balance",JSON.stringify(balance));
+                // sessionStorage.setItem("balance",JSON.stringify(balance));
                 console.log(user);
                navigate("/expense_tracking/home");
             }

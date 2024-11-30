@@ -88,8 +88,9 @@ const loginUser = async (req, res) => {
 
       const newBan = await Budget(user._id);
 
-      user.balance = newBan;
-
+      user.balance = newBan[0];
+      user.income = newBan[1];
+      user.balance = newBan[2];
       user.save();
 
       const client = { userId: user._id, username: user.username };
@@ -116,33 +117,42 @@ const loginUser = async (req, res) => {
 async function Budget(userID) {
   const user = await User.findOne({ _id: userID });
   let total = 0;
-
+  let totalIncome = 0;
+  let totalExpense = 0;
   if (user.listIncome.length > 0) {
     for (const item of user.listIncome) {
       const income = await Income.findOne({ _id: item.income })
+      if(income){
       total += income.amount;
+      totalIncome += income.amount;
+    }
     }
   }
-
 
   if (user.listExpense.length > 0) {
     for (const item of user.listExpense) {
       const expense = await Expense.findOne({ _id: item.expense })
+      if(expense){
       total -= expense.amount;
+      totalExpense += expense.amount;
+    }
     }
   }
-  return total;
+  return [total, totalIncome, totalExpense];
 }
 
 async function NotificationBudget(req, res) {
   console.log("in notification");
   const { userID } = req.body;
   const totalimo = await Budget(userID);
-  console.log(totalimo);
-  if (totalimo < 0) {
+  console.log(totalimo[0]);
+  if (totalimo[0] < 0) {
     const user = await User.findOne({ _id: userID });
     // console.log("check balance",user.balance);
     user.balance = 0;
+    user.income = totalimo[1];
+    user.expense = totalimo[2];
+    await user.save();
     return res.status(200).json({
       message: " Over budget ",
       success: false,
@@ -152,7 +162,9 @@ async function NotificationBudget(req, res) {
   } else {
     const user = await User.findOne({ _id: userID });
     // console.log("check balance",user.balance);
-    user.balance = totalimo;
+    user.balance = totalimo[0];
+    user.income = totalimo[1];
+    user.expense = totalimo[2];
     await user.save();
     return res.status(200).json({
       message: " valid budget ",
@@ -238,16 +250,16 @@ async function tableUser_expense(req, res) {
 
 const GetInfoByUserId = async (req, res) => {
   const { userID } = req.params;
-
   const userExist = await User.findOne({ _id: userID }).populate('listIncome.income').populate('listExpense.expense').exec();
   if (userExist) {
-    // console.log("done")
+    console.log("done")
     return res.json(userExist);
   } else {
     console.log("user not found id : " + userID);
     return res.status(404).json({ error: "User not found" });
   }
 }
+
 
 
 
@@ -264,5 +276,6 @@ module.exports = {
   NotificationBudget,
   tableUser_expense,
   taxDeduction,
-  GetInfoByUserId
+  GetInfoByUserId,
+
 }

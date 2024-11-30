@@ -22,6 +22,14 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    income: {
+        type: Number,
+        default: 0
+    },
+    expense: {
+        type: Number,
+        default: 0
+    },
     //listHistory: 
     listIncome: [{
         income: {

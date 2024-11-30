@@ -9,9 +9,13 @@ const MainPage = () => {
   const token = sessionStorage.getItem("token");
   console.log("check token: ", token);
 
-  
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
+  const [balance, setBalance] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
+      console.log("run fetch");
       try {
         const currentID = sessionStorage.getItem("userID");
         const bodyData = {
@@ -25,9 +29,14 @@ const MainPage = () => {
         console.log("Noti displays here: ", response.data);
         if (response.data.success) {
           toast.success(response.data.message);
-        }else{
+          setIncome(response.data.totalimo[1]);
+          setExpense(response.data.totalimo[2]);
+          setBalance(response.data.totalimo[0]);
+        } else {
           toast.error(response.data.message);
-
+          setIncome(response.data.totalimo[1]);
+          setExpense(response.data.totalimo[2]);
+          setBalance(0);
         }
       } catch (error) {
         console.log(error);
@@ -42,7 +51,7 @@ const MainPage = () => {
       <Sidebar />
       <div className="main-content">
         <h1 style={{ fontSize: "30px", fontWeight: "bold", width: "400px", wordWrap: "break-word" }}>Project Expense Tracking Software</h1>
-        <DashBoard />
+        <DashBoard IncomeNumber={income} BalanceNumber={balance} ExpenseNumber={expense} />
       </div>
     </div>
   );

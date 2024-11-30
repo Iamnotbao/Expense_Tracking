@@ -1,7 +1,7 @@
 
 const {database} = require("./config/db");
 const express = require("express");
-const { getAllUser, loginUser, registeredUser, tableUser_expense, taxDeduction,GetInfoByUserId, NotificationBudget } = require("./controllers/UserController");
+const { getAllUser, loginUser, registeredUser, tableUser_expense, taxDeduction,GetInfoByUserId, NotificationBudget, UpdateIncomeUser } = require("./controllers/UserController");
 const {addExpense,findAllExpense,findExpenseByUserId,deleteExpenseById, UpdateExpense} =require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
@@ -33,7 +33,8 @@ app.get("/tableUser_expense",tableUser_expense);
 
 app.post("/taxDeduction",taxDeduction);
 
-app.get("/getIncome/:userID",AuthController,GetInfoByUserId);
+app.get("/getInfor/:userID",AuthController,GetInfoByUserId);
+
 
 
 
@@ -44,7 +45,7 @@ app.post("/income/create",AuthController,createIncome);
 app.post("/income/create/:username",AuthController,createIncomeByUserName);
 
 app.delete("/income/:id",AuthController,deleteIncome);
-app.put("/income/:id",AuthController,UpdateIncome);
+app.put("/income",AuthController,UpdateIncome);
 
 //expense
 
