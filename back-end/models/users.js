@@ -35,14 +35,12 @@ const userSchema = new mongoose.Schema({
         income: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "incomes",
-            required: true
         }
     }],
     listExpense: [{
         expense: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "expenses",
-            required: true
         }
     }]
 
