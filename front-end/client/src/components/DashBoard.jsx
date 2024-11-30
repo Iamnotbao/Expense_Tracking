@@ -31,8 +31,6 @@ const DashBoard = () => {
             if (response.status === 200) {
                 setIncome(response.data.listIncome);
                 setExpense(response.data.listExpense);
-                console.log(income);
-                console.log(expense);
 
             } else {
                 console.error("No income data found or error response:", response);
@@ -43,14 +41,13 @@ const DashBoard = () => {
     }
     useEffect(() => {
         fetchIncomeData();
-        console.log(income);
-        console.log(expense);
+
     }, []);
 
-    useEffect(() => {
-        console.log('Updated Income:', income);
-        console.log('Updated Expense:', expense);
-    }, [income, expense]);
+    // useEffect(() => {
+    //     // console.log('Updated Income:', income);
+    //     // console.log('Updated Expense:', expense);
+    // }, [income, expense]);
 
     return (
         <div className="dashBoardScreen container-fluid">
@@ -72,13 +69,12 @@ const DashBoard = () => {
                             </div>
                         </div>
                         <div className="chart row">
-                            <div className="col-md-6">
-                                <ChartComponent Income={income.income} Expense={expense.expense} />
-                             
+                        <div style={{ width: '100%', height: '100%' }}>
+                        <ChartComponent Income={income.income} Expense={expense.expense} />
+
                             </div>
-                            <div className="col-md-6">
+                            <div  style={{ width: '100%', height: '100%' }}>
                                 <Chart_Income Income={income} Expense={expense.expense} />
-                               
                             </div>
 
                         </div>
@@ -86,9 +82,9 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div className="col-md-6 right-col">
-                <h1>Manage Balance</h1>
+                    <h1>Manage Balance</h1>
                     <div className="infoTable">
-                     
+
                         <div className="expenseTable">
                             <table className="table">
                                 <thead className="table-dark">

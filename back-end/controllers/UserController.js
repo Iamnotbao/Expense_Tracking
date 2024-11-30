@@ -126,22 +126,26 @@ async function Budget(userID) {
 
 
   if (user.listExpense.length > 0) {
-  for (const item of user.listExpense) {
-    const expense = await Expense.findOne({ _id: item.expense })
-    total -= expense.amount;
-  }
+    for (const item of user.listExpense) {
+      const expense = await Expense.findOne({ _id: item.expense })
+      total -= expense.amount;
+    }
   }
   return total;
 }
 
 async function NotificationBudget(req, res) {
-
+  console.log("in notification");
   const { userID } = req.body;
   const totalimo = await Budget(userID);
   console.log(totalimo);
   if (totalimo < 0) {
-    return res.status(401).json({
+    const user = await User.findOne({ _id: userID });
+    // console.log("check balance",user.balance);
+    user.balance = 0;
+    return res.status(200).json({
       message: " Over budget ",
+      success: false,
       totalimo: totalimo
     }
     );
@@ -235,13 +239,13 @@ async function tableUser_expense(req, res) {
 const GetInfoByUserId = async (req, res) => {
   const { userID } = req.params;
 
-  const userExist = await User.findOne({ _id:userID }).populate('listIncome.income').populate('listExpense.expense').exec();
+  const userExist = await User.findOne({ _id: userID }).populate('listIncome.income').populate('listExpense.expense').exec();
   if (userExist) {
-      console.log("done")
-      return res.json(userExist);
+    // console.log("done")
+    return res.json(userExist);
   } else {
-      console.log("user not found id : " + userID);
-      return res.status(404).json({ error: "User not found" });
+    console.log("user not found id : " + userID);
+    return res.status(404).json({ error: "User not found" });
   }
 }
 
