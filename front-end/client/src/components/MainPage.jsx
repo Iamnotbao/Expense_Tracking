@@ -41,9 +41,6 @@ const MainPage = () => {
       <ToastContainer />
       <Sidebar />
       <div className="main-content">
-        <div className="alert alert-success" role="alert">
-          A simple success alert—check it out!
-        </div>
         <h1 style={{ fontSize: "30px", fontWeight: "bold", width: "400px", wordWrap: "break-word" }}>Project Expense Tracking Software</h1>
         <DashBoard />
       </div>
