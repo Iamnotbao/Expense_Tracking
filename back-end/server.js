@@ -51,7 +51,7 @@ app.put("/income",AuthController,UpdateIncome);
 
 app.get("/expense",AuthController,findAllExpense);
 app.post("/expense",AuthController,findExpenseByUserId);
-app.put("/expense/:id",AuthController,UpdateExpense);
+app.put("/expense",AuthController,UpdateExpense);
 app.delete("/expense/:id",AuthController,deleteExpenseById);
 app.post("/expense/create",AuthController,addExpense);
 

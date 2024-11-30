@@ -18,6 +18,7 @@ const findAllExpense = async (req, res) => {
 }
 //
 const UpdateExpense = async (req, res) => {
+    // console.log("running update");
     try {
         const { expenseId, category, amount, description, paymentMethod, location } = req.body
         const result = await Expense.findOne({ _id: expenseId })
@@ -27,7 +28,7 @@ const UpdateExpense = async (req, res) => {
         result.paymentMethod = paymentMethod,
             result.location = location
         result.updatedAt = new Date();
-        res.json(result);
+        res.status(200).json(result);
         await result.save();
     } catch (err) {
         res.status(500).send({
@@ -58,7 +59,10 @@ const findExpenseByUserId = async (req, res) => {
 const deleteExpenseById = async (req, res) => {
     try {
         //func deleteExpenseById, {id}
+        
         const { userID } = req.body;
+        console.log("user Id ",userID);
+        console.log("param ",req.params.id);
         const userExist = await User.findOne({ _id: userID });
         if (!userExist) {
             return res.status(404).send({ message: "User not found" });

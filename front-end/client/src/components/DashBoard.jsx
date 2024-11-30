@@ -17,8 +17,8 @@ const DashBoard = (props) => {
     const [editIncomePopup, setEditIncomePopup] = useState(false);
     const [deleteIncomePopup, setDeleteIncomePopup] = useState(false);
     // const balance = sessionStorage.getItem("balance")
-    console.log("select",selectExpense);
-    
+    // console.log("select",selectExpense);
+
 
     const handleCancle = () => {
         setEditExpensePopup(false);
@@ -27,14 +27,69 @@ const DashBoard = (props) => {
     const handleEditExpensePopUp = (item) => {
         setSelectedExpense(item);
         setEditExpensePopup(true);
-        console.log("selected ", selectExpense);
+        // console.log("selected ", selectExpense);
     };
     const handleDeleteExpensePopUp = (item) => {
-        console.log(selectExpense);
+        // console.log(selectExpense);
         setSelectedExpense(item);
         setDeleteExpensePopup(true);
     };
+    const handleEditExpense = async (event) => {
+        // const {expenseId,category, amount,description,paymentMethod,location}=req.body
+        event.preventDefault();
+        console.log("selected Expense ", selectExpense);
+        const baseURL = "http://localhost:5000/expense";
+        try {
+            let newExpense = {
+                expenseId: selectExpense.expense._id,
+                category: event.target.category.value,
+                amount: event.target.amount.value,
+                description: event.target.description.value,
+                paymentMethod: event.target.paymentMethod.value,
+                location: event.target.location.value,
+            }
+            const response = await axios.put((`${baseURL}`), newExpense, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                },
+            })
+            if (response.data) {
+                console.log(response);
+                handleCancle();
+            }
+        } catch (error) {
+            console.log(error);
+        };
+    }
+    const handleDeleteExpense = async (event) => {
+       // event.preventDefault();
+        console.log(selectExpense);
+        console.log("user Id "+selectExpense.user);
+        const baseURL = "http://localhost:5000/expense";
 
+        console.log("Run delete");
+        console.log(`${baseURL}/${selectExpense._id}`);
+        let deleteExpense = {
+            userID: selectExpense.user,
+        };
+        try {
+            const response = await axios.delete(
+                `${baseURL}/${selectExpense._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(token)}`,
+                    },
+                    data: deleteExpense,
+                }
+            );
+            if (response.data) {
+                console.log("delete response :", response.data);
+                handleCancle();
+            }
+        } catch (error) {
+            console.error("Error deleting income:", error);
+        }
+    }
 
 
 
@@ -192,20 +247,20 @@ const DashBoard = (props) => {
                                     </tr>
                                 </thead>
                                 {
-                                    expense&& expense.map((item, index) => (
+                                    expense && expense.map((item, index) => (
                                         <tbody key={index}>
                                             <tr>
                                                 <td scope="row">{index + 1}</td>
-                                                <td>{item.expense?.category}</td>
-                                                <td>{item.expense?.amount}</td>
-                                                <td>{item.expense?.location}</td>
-                                                <td>{item.expense?.paymentMethod}</td>
-                                                <td>{item.expense?.paymentDate}</td>
+                                                <td>{item.expense.category}</td>
+                                                <td>{item.expense.amount}</td>
+                                                <td>{item.expense.location}</td>
+                                                <td>{item.expense.paymentMethod}</td>
+                                                <td>{item.expense.paymentDate}</td>
                                                 <td className="buttonGroup">
-                                                    <a className="edit" onClick={() => {handleEditExpensePopUp(item.expense) }}>
+                                                    <a className="edit" onClick={() => { handleEditExpensePopUp(item.expense) }}>
                                                         <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                                                     </a>
-                                                    <a className="delete" onClick={() => {handleDeleteExpensePopUp(item) }}>
+                                                    <a className="delete" onClick={() => { handleDeleteExpensePopUp(item.expense) }}>
                                                         <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                                                     </a>
                                                 </td>
@@ -304,11 +359,11 @@ const DashBoard = (props) => {
                     </div>
                 </div>
             )}
-             {editExpensePopup && (
+            {editExpensePopup && (
                 <div id="editEmployeeModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form onSubmit={handleEditExpense}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Edit Employee</h4>
                                     <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -348,7 +403,7 @@ const DashBoard = (props) => {
                 <div id="deleteEmployeeModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form>
+                            <form onSubmit={handleDeleteExpense}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Delete Employee</h4>
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
