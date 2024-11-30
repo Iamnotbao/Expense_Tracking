@@ -11,6 +11,9 @@ const DashBoard = (props) => {
     const [expense, setExpense] = useState([]);
     const [selectedIncome, setSelectedIncome] = useState(null);
     const [selectExpense, setSelectedExpense] = useState(null);
+    const [editExpensePopup, setEditExpensePopup] = useState(false);
+    const [deleteExpensePopup, setDeleteExpensePopup] = useState(false);
+
     const [editIncomePopup, setEditIncomePopup] = useState(false);
     const [deleteIncomePopup, setDeleteIncomePopup] = useState(false);
     // const balance = sessionStorage.getItem("balance")
@@ -286,7 +289,7 @@ const DashBoard = (props) => {
                     </div>
                 </div>
             )}
-             {edit && (
+             {editExpensePopup && (
                 <div id="editEmployeeModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
@@ -326,7 +329,7 @@ const DashBoard = (props) => {
                     </div>
                 </div>
             )}
-            {deleteP && (
+            {deleteExpensePopup && (
                 <div id="deleteEmployeeModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
