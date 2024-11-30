@@ -17,8 +17,23 @@ const DashBoard = (props) => {
     const [editIncomePopup, setEditIncomePopup] = useState(false);
     const [deleteIncomePopup, setDeleteIncomePopup] = useState(false);
     // const balance = sessionStorage.getItem("balance")
+    console.log("select",selectExpense);
+    
 
-
+    const handleCancle = () => {
+        setEditExpensePopup(false);
+        setDeleteExpensePopup(false)
+    }
+    const handleEditExpensePopUp = (item) => {
+        setSelectedExpense(item);
+        setEditExpensePopup(true);
+        console.log("selected ", selectExpense);
+    };
+    const handleDeleteExpensePopUp = (item) => {
+        console.log(selectExpense);
+        setSelectedExpense(item);
+        setDeleteExpensePopup(true);
+    };
 
 
 
@@ -187,10 +202,10 @@ const DashBoard = (props) => {
                                                 <td>{item.expense?.paymentMethod}</td>
                                                 <td>{item.expense?.paymentDate}</td>
                                                 <td className="buttonGroup">
-                                                    <a className="edit" onClick={() => { handleEditIncomePopUp(item) }}>
+                                                    <a className="edit" onClick={() => {handleEditExpensePopUp(item.expense) }}>
                                                         <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                                                     </a>
-                                                    <a className="delete" onClick={() => { handleDeleteIncomePopUp(item) }}>
+                                                    <a className="delete" onClick={() => {handleDeleteExpensePopUp(item) }}>
                                                         <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                                                     </a>
                                                 </td>
@@ -293,7 +308,7 @@ const DashBoard = (props) => {
                 <div id="editEmployeeModal" className="modal_active" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form onSubmit={handleEdit}>
+                            <form>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Edit Employee</h4>
                                     <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -301,23 +316,23 @@ const DashBoard = (props) => {
                                 <div className="modal-body">
                                     <div className="form-group">
                                         <label>category</label>
-                                        <input type="text" name="category" defaultValue={select.category} className="form-control" required />
+                                        <input type="text" name="category" defaultValue={selectExpense.category} className="form-control" required />
                                     </div>
                                     <div className="form-group">
                                         <label> amount</label>
-                                        <input type="number" name="amount" defaultValue={select.amount} className="form-control" required />
+                                        <input type="number" name="amount" defaultValue={selectExpense.amount} className="form-control" required />
                                     </div>
                                     <div className="form-group">
                                         <label>description</label>
-                                        <textarea className="form-control" defaultValue={select.description} name="description" required></textarea>
+                                        <textarea className="form-control" defaultValue={selectExpense.description} name="description" required></textarea>
                                     </div>
                                     <div className="form-group">
                                         <label>payment Method</label>
-                                        <input type="text" className="form-control" defaultValue={select.paymentMethod} name="paymentMethod" required />
+                                        <input type="text" className="form-control" defaultValue={selectExpense.paymentMethod} name="paymentMethod" required />
                                     </div>
                                     <div className="form-group">
                                         <label>location</label>
-                                        <input type="text" className="form-control" defaultValue={select.location} name="location" required />
+                                        <input type="text" className="form-control" defaultValue={selectExpense.location} name="location" required />
                                     </div>
                                 </div>
                                 <div className="modal-footer">
@@ -333,7 +348,7 @@ const DashBoard = (props) => {
                 <div id="deleteEmployeeModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form onSubmit={handleDelete}>
+                            <form>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Delete Employee</h4>
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
