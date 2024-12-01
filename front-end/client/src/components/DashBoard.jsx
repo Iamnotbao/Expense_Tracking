@@ -22,17 +22,25 @@ const DashBoard = (props) => {
 
     const handleCancle = () => {
         setEditExpensePopup(false);
-        setDeleteExpensePopup(false)
+        setDeleteExpensePopup(false);
+        setEditIncomePopup(false);
+        setDeleteIncomePopup(false);
     }
     const handleEditExpensePopUp = (item) => {
         setSelectedExpense(item);
         setEditExpensePopup(true);
+        setDeleteExpensePopup(false);
+        setEditIncomePopup(false);
+        setDeleteIncomePopup(false);
         // console.log("selected ", selectExpense);
     };
     const handleDeleteExpensePopUp = (item) => {
         // console.log(selectExpense);
         setSelectedExpense(item);
         setDeleteExpensePopup(true);
+        setEditExpensePopup(false);
+        setEditIncomePopup(false);
+        setDeleteIncomePopup(false);
     };
     const handleEditExpense = async (event) => {
         // const {expenseId,category, amount,description,paymentMethod,location}=req.body
@@ -97,18 +105,26 @@ const DashBoard = (props) => {
 
     //edit
     const handleCancleIncome = () => {
+        setEditExpensePopup(false);
+        setDeleteExpensePopup(false);
         setEditIncomePopup(false);
-        setDeleteIncomePopup(false)
+        setDeleteIncomePopup(false);
     }
     const handleEditIncomePopUp = (income) => {
         setSelectedIncome(income);
         setEditIncomePopup(true);
+        setEditExpensePopup(false);
+        setDeleteExpensePopup(false);
+        setDeleteIncomePopup(false);
         console.log("selected ", selectedIncome);
     };
     const handleDeleteIncomePopUp = (income) => {
         console.log(selectedIncome);
         setSelectedIncome(income);
         setDeleteIncomePopup(true);
+        setEditExpensePopup(false);
+        setDeleteExpensePopup(false);
+        setDeleteIncomePopup(false);
     };
 
     const handleEditIncome = async (event) => {

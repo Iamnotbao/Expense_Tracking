@@ -12,13 +12,14 @@ const Income_DashBoard = () => {
     const [newAdd, setNewAdd] = useState(null);
     const [selectedIncome, setSelectedIncome] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
-        //  console.log("select",select);
-    console.log("mulple",selectedIncome);
-    const handleDelete = async () => {
-        //event.preventDefault();
+    //  console.log("select",select);
+    console.log("mulple", selectedIncome);
+    const handleDelete = async (event) => {
+       // event.preventDefault();
         let deleteIncome = {
             userID: select.user._id,
         };
+        console.log(deleteIncome);
         try {
             const response = await axios.delete(
                 `${baseURL}/${select._id}`,
@@ -41,15 +42,16 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-      // event.preventDefault();
+        //event.preventDefault();
         let newEdit = {
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
             idIncome: select._id
         }
+        console.log("New Edit Data:", newEdit);
 
         try {
-            const response = await axios.put(`${baseURL}/${select._id}`, newEdit, {
+            const response = await axios.put(`${baseURL}`, newEdit, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
                 },
@@ -94,10 +96,10 @@ const Income_DashBoard = () => {
         } else {
             setSelectedIncome(income.map(item => item._id));
         }
-        setSelectAll(!selectAll); 
+        setSelectAll(!selectAll);
     }
     const handleAdd = async (event) => {
-       // event.preventDefault();
+        // event.preventDefault();
         try {
             let newIncome = {
                 nameIncome: event.target.nameIncome.value,
@@ -113,7 +115,7 @@ const Income_DashBoard = () => {
             if (response.data) {
                 console.log(response.data);
                 handleCancle();
-            }else{
+            } else {
                 console.log("not found");
             }
         } catch (error) {
@@ -221,13 +223,13 @@ const Income_DashBoard = () => {
                 <div id="addModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form  onSubmit={handleAdd}>
+                            <form onSubmit={handleAdd}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Add Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" onClick={handleCancle}>&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                <div className="form-group">
+                                    <div className="form-group">
                                         <label>userName Name</label>
                                         <input type="text" name="userName" className="form-control" required />
                                     </div>
@@ -295,7 +297,7 @@ const Income_DashBoard = () => {
                                 </div>
                                 <div className="modal-footer">
                                     <input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel" onClick={handleCancle} />
-                                    <input type="submit" className="btn btn-danger" value="Delete"  />
+                                    <input type="submit" className="btn btn-danger" value="Delete" />
                                 </div>
                             </form>
                         </div>

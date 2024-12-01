@@ -1,4 +1,3 @@
-
 const User = require("../models/users.js");
 const Income = require("../models/incomes.js");
 const Expense = require("../models/expense.js");
@@ -69,11 +68,53 @@ const registeredUser = async (req, res) => {
   } catch (error) {
   }
 }
+const editUser = async (req, res) => {
+
+  const { userID, username, email, phone, address, role_id } = req.body;
+  console.log("Received data:", { userID, username, email, phone, address, role_id });
+  const ExistUser = await User.findOne({ _id: userID });
+  try {
+    if (ExistUser) {
+      ExistUser.username = username;
+      ExistUser.email = email;
+      ExistUser.phone = phone;
+      ExistUser.address = address;
+      ExistUser.role_id = role_id;
+      ExistUser.save();
+      return res.status(200).json(ExistUser);
+    }
+  } catch (error) {
+    return res.status(500).send("error while editting");
+  }
+}
+const deleteUser = async (req, res) => {
+  console.log("Running delete user");
+  const { userID } = req.body;
+
+  // Kiểm tra xem userID có tồn tại trong request body không
+  if (!userID) {
+      return res.status(400).send("User ID is required");
+  }
+
+  try {
+      // Tìm và xóa người dùng trong một bước với findOneAndDelete
+      const result = await User.findOneAndDelete({ _id: userID });
+
+      if (result) {
+          return res.status(200).send("User deleted successfully");
+      } else {
+          return res.status(404).send("User not found");
+      }
+  } catch (error) {
+      console.error(error); // Log lỗi để dễ dàng theo dõi
+      return res.status(500).send("Error while deleting user");
+  }
+};
 
 const loginUser = async (req, res) => {
   const { username } = req.body;
   const { password } = req.body;
-  const user = await User.findOne({ username: username });
+  const user = await User.findOne({ username: username }).populate('listIncome.income').populate('listExpense.expense').exec();
 
   if (!user) {
     return res.status(401).json({
@@ -98,7 +139,9 @@ const loginUser = async (req, res) => {
       return res.status(200).json({
         message: true,
         username: user.username,
+        user_role: user.role_id,
         userID: user._id,
+        user: user,
         accessToken: token
       })
 
@@ -122,20 +165,20 @@ async function Budget(userID) {
   if (user.listIncome.length > 0) {
     for (const item of user.listIncome) {
       const income = await Income.findOne({ _id: item.income })
-      if(income){
-      total += income.amount;
-      totalIncome += income.amount;
-    }
+      if (income) {
+        total += income.amount;
+        totalIncome += income.amount;
+      }
     }
   }
 
   if (user.listExpense.length > 0) {
     for (const item of user.listExpense) {
       const expense = await Expense.findOne({ _id: item.expense })
-      if(expense){
-      total -= expense.amount;
-      totalExpense += expense.amount;
-    }
+      if (expense) {
+        total -= expense.amount;
+        totalExpense += expense.amount;
+      }
     }
   }
   return [total, totalIncome, totalExpense];
@@ -260,15 +303,6 @@ const GetInfoByUserId = async (req, res) => {
   }
 }
 
-
-
-
-
-
-
-
-
-
 module.exports = {
   getAllUser,
   loginUser,
@@ -277,5 +311,6 @@ module.exports = {
   tableUser_expense,
   taxDeduction,
   GetInfoByUserId,
-
+  editUser,
+  deleteUser,
 }

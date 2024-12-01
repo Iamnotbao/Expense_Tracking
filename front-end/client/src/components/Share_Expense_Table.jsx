@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "./CSS/Share_Expense.css"
 const Share_Expense_Table = () => {
     const [listOfUser, setListOfUser] = useState([]);
-    const baseURL = "http://localhost:5000/tableUser_expense"
+    const baseURL = "http://localhost:5000/tableUser_expense";
     console.log("check list of user: ", listOfUser);
 
     useEffect(() => {

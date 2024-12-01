@@ -1,6 +1,6 @@
 const User = require("../models/users.js");
 const Income = require("../models/incomes.js")
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 
 const getAllincome = async (req, res) => {
     const income = await Income.find({}).populate('user').exec();
@@ -36,8 +36,8 @@ const createIncome = async (req, res) => {
         Year: year,
         user: userID
     })
-    console.log("checking income",incomes);
-    
+    console.log("checking income", incomes);
+
     await incomes.save();
     console.log(userExist.listIncome);
 
@@ -122,19 +122,19 @@ const UpdateIncome = async (req, res) => {
 
     const { idIncome, nameIncome, amount } = req.body;
     console.log(idIncome);
-  // Print values to console
-  console.log('idIncome:', idIncome);
-  console.log('nameIncome:', nameIncome);
-  console.log('amount:', amount);
+    // Print values to console
+    console.log('idIncome:', idIncome);
+    console.log('nameIncome:', nameIncome);
+    console.log('amount:', amount);
 
     //const user = await User.findOne({ _id: userID });
-    
-    const result = await Income.findOne({ _id: idIncome})
+
+    const result = await Income.findOne({ _id: idIncome })
     if (!result) {
         // If no document is found, return a 404 response
         console.log(`Income record with ID ${idIncome} not found.`);
         return res.status(404).json({ error: 'Income record not found' });
-      }
+    }
     result.nameIncome = nameIncome;
     result.amount = amount;
 
@@ -150,4 +150,4 @@ const UpdateIncome = async (req, res) => {
 };
 
 
-module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName,}
+module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName, }
