@@ -40,14 +40,14 @@ const Login = () => {
                 const balance = response.data.balance;
                 const role = response.data.user_role;
                 const username = response.data.username;
-                console.log(username);
+                console.log(userID);
                 
                 sessionStorage.setItem("role",JSON.stringify(role));
                 sessionStorage.setItem("user",JSON.stringify(user));
                 sessionStorage.setItem("userID",userID);
                 sessionStorage.setItem("token",JSON.stringify(token));
                 sessionStorage.setItem("username",username);
-            
+                sessionStorage.setItem("userID",userID);
                 console.log("l",response.data.listIncome);
                 
                 // sessionStorage.setItem("balance",JSON.stringify(balance));

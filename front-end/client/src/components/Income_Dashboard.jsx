@@ -15,8 +15,10 @@ const Income_DashBoard = () => {
     const role = sessionStorage.getItem("role");
     const list = sessionStorage.getItem("listIncome");
     const username = sessionStorage.getItem("username");
-    console.log(username);
-    console.log(role);
+    const ID = sessionStorage.getItem("userID");
+    console.log("income", income);
+    console.log(select);
+
     const ListofUser = JSON.parse(list);
     useEffect(() => {
         if (role == 1) {
@@ -46,14 +48,23 @@ const Income_DashBoard = () => {
     //  console.log("select",select);
     console.log("mulple", selectedIncome);
     const handleDelete = async (event) => {
-        // event.preventDefault();
-        let deleteIncome = {
-            userID: select.user._id,
-        };
+        event.preventDefault();
+        let deleteIncome;
+        if (role == 1) {
+            deleteIncome = {
+                userID: select.user._id,
+            };
+        }
+        else {
+            deleteIncome = {
+                userID: select.income.user,
+            };
+        }
+        console.log("this", deleteIncome);
         console.log(deleteIncome);
         try {
             const response = await axios.delete(
-                `${baseURL}/${select._id}`,
+                `${baseURL}/${select.income._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(token)}`,
@@ -63,6 +74,10 @@ const Income_DashBoard = () => {
             );
 
             if (response.data) {
+                console.log("result",response.data);
+                
+                setIncome(response.data)
+
                 handleCancle();
             }
         } catch (error) {
@@ -73,11 +88,11 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         let newEdit = {
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
-            idIncome: select._id
+            idIncome: select.income._id
         }
         console.log("New Edit Data:", newEdit);
 
@@ -88,6 +103,23 @@ const Income_DashBoard = () => {
                 },
             })
             if (response.data) {
+                console.log("ob",response.data._id);
+                const updatedIncome = income.map((i) => {
+                    if (i.income?._id === response.data._id) {
+                        return {
+                            ...i,
+                            income: {
+                                ...i.income,
+                                ...response.data, 
+                            },
+                        };
+                    }
+                    
+                    return i;
+                });
+                
+             
+                setIncome(updatedIncome);
                 handleCancle();
             }
 
@@ -130,21 +162,26 @@ const Income_DashBoard = () => {
         setSelectAll(!selectAll);
     }
     const handleAdd = async (event) => {
-        // event.preventDefault();
+        event.preventDefault();
         try {
             let newIncome = {
+                userID: ID,
                 nameIncome: event.target.nameIncome.value,
                 amount: event.target.amount.value,
-                userName: event.target.userName.value,
+                month: event.target.month.value,
+                year: event.target.year.value,
+
             }
-            console.log(`${baseURL}/create/${newIncome.userName}`);
-            const response = await axios.post(`${baseURL}/create/${newIncome.userName}`, newIncome, {
+            console.log(newIncome);
+
+            const response = await axios.post(`${baseURL}/create/`, newIncome, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
                 },
             })
             if (response.data) {
                 console.log(response.data);
+                setIncome(response.data.listIncome);
                 handleCancle();
             } else {
                 console.log("not found");
@@ -200,8 +237,8 @@ const Income_DashBoard = () => {
                                                     </span>
                                                 </td>
                                                 <td>{index + 1}</td>
-                                                <td>{item.nameIncome}</td>
-                                                <td>{item.amount}$</td>
+                                                <td>{item.income.nameIncome}</td>
+                                                <td>{item.income.amount}$</td>
 
                                                 {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
 
@@ -270,16 +307,20 @@ const Income_DashBoard = () => {
                                 </div>
                                 <div className="modal-body">
                                     <div className="form-group">
-                                        <label>userName Name</label>
-                                        <input type="text" name="userName" className="form-control" required />
-                                    </div>
-                                    <div className="form-group">
                                         <label>Income Name</label>
                                         <input type="text" name="nameIncome" className="form-control" required />
                                     </div>
                                     <div className="form-group">
                                         <label>Amount</label>
                                         <input type="number" name="amount" className="form-control" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Month</label>
+                                        <input type="number" name="month" className="form-control" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Year</label>
+                                        <input type="number" name="year" className="form-control" required />
                                     </div>
                                 </div>
                                 <div className="modal-footer">
@@ -305,11 +346,11 @@ const Income_DashBoard = () => {
                                 <div className="modal-body">
                                     <div className="form-group">
                                         <label htmlFor="nameIncome">Income Name</label>
-                                        <input type="text" className="form-control" name="nameIncome" defaultValue={select.nameIncome} required id="nameIncome" />
+                                        <input type="text" className="form-control" name="nameIncome" defaultValue={select.income.nameIncome} required id="nameIncome" />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="amount">Amount</label>
-                                        <input type="number" name="amount" className="form-control" defaultValue={select.amount} required id="amount" />
+                                        <input type="number" name="amount" className="form-control" defaultValue={select.income.amount} required id="amount" />
                                     </div>
 
                                 </div>
@@ -332,7 +373,7 @@ const Income_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete <span><b>{select.nameIncome}</b></span> ?</p>
+                                    <p>Are you sure you want to delete <span><b>{select.income.nameIncome}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">

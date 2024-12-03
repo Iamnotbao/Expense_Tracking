@@ -96,9 +96,8 @@ const deleteIncome = async (req, res) => {
 
     userExist.listIncome = newlist;
 
-    res.json(userExist.listIncome);
-
-    await userExist.save();
+   await userExist.save();
+    return res.status(200).json(userExist.listIncome);
 }
 
 const DeleteMultipleIncome = async (req, res) => {
@@ -145,8 +144,9 @@ const UpdateIncome = async (req, res) => {
         console.log("not");
     }
 
-    res.json(result);
+   
     await result.save();
+    return res.json(result);
 };
 
 
