@@ -93,21 +93,43 @@ const deleteUser = async (req, res) => {
 
   // Kiểm tra xem userID có tồn tại trong request body không
   if (!userID) {
-      return res.status(400).send("User ID is required");
+    return res.status(400).send("User ID is required");
   }
 
   try {
-      // Tìm và xóa người dùng trong một bước với findOneAndDelete
-      const result = await User.findOneAndDelete({ _id: userID });
+    // Tìm và xóa người dùng trong một bước với findOneAndDelete
+    const result1 = await User.findOne({ _id: userID });
+    if (result1.listIncome != null) {
+    
+      for (const item of result1.listIncome) {
 
-      if (result) {
-          return res.status(200).send("User deleted successfully");
-      } else {
-          return res.status(404).send("User not found");
+        console.log("check item",item.income._id);
+        
+         await Income.deleteOne({ _id: item.income._id });
+
       }
+
+    }
+    if (result1.listExpense != null) {
+    
+      
+      for (const item of result1.listExpense) {
+        console.log("check item",item.expense._id);
+         await Expense.deleteOne({ _id: item.expense._id});
+
+      }
+
+    }
+    const result = await User.findOneAndDelete({ _id: userID });
+
+    if (result) {
+      return res.status(200).send("User deleted successfully");
+    } else {
+      return res.status(404).send("User not found");
+    }
   } catch (error) {
-      console.error(error); // Log lỗi để dễ dàng theo dõi
-      return res.status(500).send("Error while deleting user");
+    console.error(error); // Log lỗi để dễ dàng theo dõi
+    return res.status(500).send("Error while deleting user");
   }
 };
 
