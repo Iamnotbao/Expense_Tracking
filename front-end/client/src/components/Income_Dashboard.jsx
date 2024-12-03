@@ -74,8 +74,8 @@ const Income_DashBoard = () => {
             );
 
             if (response.data) {
-                console.log("result",response.data);
-                
+                console.log("result", response.data);
+
                 setIncome(response.data)
 
                 handleCancle();
@@ -103,22 +103,22 @@ const Income_DashBoard = () => {
                 },
             })
             if (response.data) {
-                console.log("ob",response.data._id);
+                console.log("ob", response.data._id);
                 const updatedIncome = income.map((i) => {
                     if (i.income?._id === response.data._id) {
                         return {
                             ...i,
                             income: {
                                 ...i.income,
-                                ...response.data, 
+                                ...response.data,
                             },
                         };
                     }
-                    
+
                     return i;
                 });
-                
-             
+
+
                 setIncome(updatedIncome);
                 handleCancle();
             }
@@ -220,6 +220,8 @@ const Income_DashBoard = () => {
                                     <th>Income Name</th>
                                     <th>Amount</th>
                                     <th>User Name</th>
+                                    <th>Month</th>
+                                    <th>Year</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -243,6 +245,8 @@ const Income_DashBoard = () => {
                                                 {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
 
                                                 <td>
+                                                    <td>{item.income.month}</td>
+                                                    <td>{item.income.Year}</td>
                                                     <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                     <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                                 </td>
@@ -269,6 +273,8 @@ const Income_DashBoard = () => {
                                             <td>{item.income.amount}$</td>
 
                                             <td>{username}</td>
+                                            <td>{item.income.month}</td>
+                                            <td>{item.income.Year}</td>
 
                                             <td>
                                                 <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
