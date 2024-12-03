@@ -142,7 +142,7 @@ const loginUser = async (req, res) => {
         user_role: user.role_id,
         userID: user._id,
         user: user,
-        accessToken: token
+        accessToken: token,
       })
 
 
@@ -273,7 +273,7 @@ async function tableUser_expense(req, res) {
 
   const outlist = [];
 
-  const re = await User.find()
+  const re = await User.find().populate('listIncome.income').populate('listExpense.expense').exec();
 
   for await (const userOut of re) {
     if (userOut.listExpense.length > 0) {

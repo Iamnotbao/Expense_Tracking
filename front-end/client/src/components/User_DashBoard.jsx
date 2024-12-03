@@ -151,7 +151,7 @@ const User_DashBoard = () => {
                                             <td>{item.email}</td>
                                             <td>{item.phone}</td>
                                             <td>{item.address}</td>
-                                            <td>{item.role_id == 0 ? "admin" : "user"}</td>
+                                            <td>{item.role_id == 0 ? "user" : "admin"}</td>
                                             <td>{item.balance}</td>
                                             <td>{item.income}</td>
                                             <td>{item.expense}</td>

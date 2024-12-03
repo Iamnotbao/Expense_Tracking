@@ -38,12 +38,18 @@ const Login = () => {
                 const user = response.data.user;
                 const userID = response.data.userID;
                 const balance = response.data.balance;
-                console.log(balance);
+                const role = response.data.user_role;
+                const username = response.data.username;
+                console.log(username);
                 
+                sessionStorage.setItem("role",JSON.stringify(role));
                 sessionStorage.setItem("user",JSON.stringify(user));
                 sessionStorage.setItem("userID",userID);
                 sessionStorage.setItem("token",JSON.stringify(token));
-                sessionStorage.setItem("listIncome",JSON.stringify(response.data.listIncome));
+                sessionStorage.setItem("username",username);
+            
+                console.log("l",response.data.listIncome);
+                
                 // sessionStorage.setItem("balance",JSON.stringify(balance));
                 console.log(user);
                navigate("/expense_tracking/home");

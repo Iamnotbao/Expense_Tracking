@@ -12,10 +12,16 @@ const Expense_DashBoard = () => {
     const [selectedExpense, setSelectedExpense] = useState([]);
     const [select, setSelect] = useState(null);
     const [selectAll, setSelectAll] = useState(false);
+    const role = sessionStorage.getItem("role");
+    const list = sessionStorage.getItem("listExpense");
+    const username = sessionStorage.getItem("username");
+
+
+    const ListofUser = JSON.parse(list);
+    console.log(role);
     //console.log(expense);
     //console.log("check selected"+ selectedExpense);
     const handleAddPopUp = () => {
-
         setAdd(true);
     };
     const handleEditPopUp = (item) => {
@@ -34,24 +40,30 @@ const Expense_DashBoard = () => {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(baseURL, {
-                    headers: {
-                        "Authorization": `Bearer ${JSON.parse(token)}`
+        if (role == 1) {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(baseURL, {
+                        headers: {
+                            "Authorization": `Bearer ${JSON.parse(token)}`
+                        }
+                    })
+                    console.log("expense", response.data);
+
+                    if (response.data) {
+                        setExpense(response.data);
                     }
-                })
-                console.log("expense", response.data);
+                } catch (error) {
+                    console.log(error);
 
-                if (response.data) {
-                    setExpense(response.data);
                 }
-            } catch (error) {
-                console.log(error);
-
             }
+            fetchData();
+
+        } else {
+            setExpense(ListofUser);
         }
-        fetchData();
+
     }, [])
     const handleCheckBox = (id) => {
         setSelectedExpense((prevSelected) => {
@@ -122,13 +134,13 @@ const Expense_DashBoard = () => {
     };
 
     const handleDelete = async () => {
-       // event.preventDefault();
+        // event.preventDefault();
         console.log("Run delete");
         console.log(`${baseURL}/${select._id}`);
-        let deleteExpense={
+        let deleteExpense = {
             userID: select.user._id
         };
-        try{
+        try {
             const response = await axios.delete(
                 `${baseURL}/${select._id}`,
                 {
@@ -142,7 +154,7 @@ const Expense_DashBoard = () => {
                 console.log("delete response :", response.data);
                 handleCancle();
             }
-        }catch (error) {
+        } catch (error) {
             console.error("Error deleting income:", error);
         }
     }
@@ -179,31 +191,61 @@ const Expense_DashBoard = () => {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {expense.length !== 0 &&
-                                    expense.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>
-                                                <span className="custom-checkbox">
-                                                    <input type="checkbox" id="checkbox1" className="options[]"
-                                                        value="1"
-                                                        checked={selectAll || selectedExpense.includes(item._id)}
-                                                        onChange={() => { handleCheckBox(item._id) }} />
-                                                    <label htmlFor="checkbox1"></label>
-                                                </span>
-                                            </td>
-                                            <td>{index + 1}</td>
-                                            <td>{item.category}</td>
-                                            <td>{item.amount}$</td>
-                                            <td>{item.user.username}</td>
-                                            <td>
-                                                <a href="#editEmployeeModal" className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                                <a href="#deleteEmployeeModal" className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                            </td>
-                                        </tr>
-                                    )
-                                    )}
-                            </tbody>
+                            {(role == 1) ? (
+                                <tbody>
+                                    {expense.length !== 0 &&
+                                        expense.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <span className="custom-checkbox">
+                                                        <input type="checkbox" id="checkbox1" className="options[]"
+                                                            value="1"
+                                                            checked={selectAll || selectedExpense.includes(item._id)}
+                                                            onChange={() => { handleCheckBox(item._id) }} />
+                                                        <label htmlFor="checkbox1"></label>
+                                                    </span>
+                                                </td>
+                                                <td>{index + 1}</td>
+                                                <td>{item.category}</td>
+                                                <td>{item.amount}$</td>
+                                                <td>{item.user.username}</td>
+                                                <td>
+                                                    <a href="#editEmployeeModal" className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a href="#deleteEmployeeModal" className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
+                                        )
+                                        )}
+                                </tbody>
+                            ) : (
+                                <tbody>
+                                    {expense.length !== 0 &&
+                                        expense.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <span className="custom-checkbox">
+                                                        <input type="checkbox" id="checkbox1" className="options[]" value="1"
+                                                            checked={selectAll || selectedExpense.includes(item.expense._id)}
+                                                            onChange={() => { handleCheckBox(item.expense._id) }} />
+                                                        <label htmlFor="checkbox1"></label>
+                                                    </span>
+                                                </td>
+                                                <td>{index + 1}</td>
+                                                <td>{item.expense.nameIncome}</td>
+                                                <td>{item.expense.amount}$</td>
+
+                                                <td>{username}</td>
+
+                                                <td>
+                                                    <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
+                                        )
+                                        )}
+                                </tbody>
+                            )}
+
                         </table>
                         <div className="clearfix">
                             <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>

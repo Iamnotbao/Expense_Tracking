@@ -53,10 +53,10 @@ const Share_Expense_Table = () => {
                                             <td>{item.username}</td>
                                             <td>
                                             {item.listExpense.length !==0 ? (item.listExpense.map((ex)=>(
-                                                <p key={ex._id}>{ex.category}</p>
+                                                <p key={ex.expense._id}>{ex.expense.category}</p>
                                             ))):("loading") }
                                             </td>
-                                            <td>Germany</td>
+                                            <td>{item.expense}</td>
                                             <td>
                                                 <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
                                                 <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
@@ -65,47 +65,6 @@ const Share_Expense_Table = () => {
                                         </tr>
                                     ))
                                 ):(<p>Loading</p>)}
-
-
-                                <tr>
-                                    <td>3</td>
-                                    <td>Fran Wilson</td>
-                                    <td>C/ Araquil, 67</td>
-                                    <td>Madrid</td>
-                                    <td>28023</td>
-                                    <td>Spain</td>
-                                    <td>
-                                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Dominique Perrier</td>
-                                    <td>25, rue Lauriston</td>
-                                    <td>Paris</td>
-                                    <td>75016</td>
-                                    <td>France</td>
-                                    <td>
-                                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Martin Blank</td>
-                                    <td>Via Monte Bianco 34</td>
-                                    <td>Turin</td>
-                                    <td>10100</td>
-                                    <td>Italy</td>
-                                    <td>
-                                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                         <div class="clearfix">

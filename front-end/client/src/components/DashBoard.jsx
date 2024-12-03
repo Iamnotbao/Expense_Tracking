@@ -194,7 +194,10 @@ const DashBoard = (props) => {
 
             if (response.status === 200) {
                 console.log("get infor", response.data);
+               
+               
                 setIncome(response.data.listIncome);
+              
                 setExpense(response.data.listExpense);
             } else {
                 console.error("No income data found or error response:", response);
@@ -208,8 +211,11 @@ const DashBoard = (props) => {
     }, []);
 
     useEffect(() => {
+
         console.log('Updated Income:', income);
         console.log('Updated Expense:', expense);
+        sessionStorage.setItem("listIncome",JSON.stringify(income));
+        sessionStorage.setItem("listExpense",JSON.stringify(expense));
 
     }, [income, expense]);
 

@@ -12,10 +12,41 @@ const Income_DashBoard = () => {
     const [newAdd, setNewAdd] = useState(null);
     const [selectedIncome, setSelectedIncome] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+    const role = sessionStorage.getItem("role");
+    const list = sessionStorage.getItem("listIncome");
+    const username = sessionStorage.getItem("username");
+    console.log(username);
+    console.log(role);
+    const ListofUser = JSON.parse(list);
+    useEffect(() => {
+        if (role == 1) {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(baseURL, {
+                        headers: {
+                            "Authorization": `Bearer ${JSON.parse(token)}`
+                        }
+                    })
+                    console.log("income", response.data);
+                    if (response.data) {
+                        setIncome(response.data.income);
+                    }
+                } catch (error) {
+                    console.log(error);
+
+                }
+            }
+            fetchData();
+        }
+        else {
+            setIncome(ListofUser);
+
+        }
+    }, [])
     //  console.log("select",select);
     console.log("mulple", selectedIncome);
     const handleDelete = async (event) => {
-       // event.preventDefault();
+        // event.preventDefault();
         let deleteIncome = {
             userID: select.user._id,
         };
@@ -123,25 +154,6 @@ const Income_DashBoard = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(baseURL, {
-                    headers: {
-                        "Authorization": `Bearer ${JSON.parse(token)}`
-                    }
-                })
-                console.log("income", response.data);
-                if (response.data) {
-                    setIncome(response.data.income);
-                }
-            } catch (error) {
-                console.log(error);
-
-            }
-        }
-        fetchData();
-    }, [])
     return (
         <>
             <div className="container">
@@ -174,23 +186,52 @@ const Income_DashBoard = () => {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {(role == 1) ? (
+                                <tbody>
+                                    {income.length !== 0 &&
+                                        income.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <span className="custom-checkbox">
+                                                        <input type="checkbox" id="checkbox1" className="options[]" value="1"
+                                                            checked={selectAll || selectedIncome.includes(item._id)}
+                                                            onChange={() => { handleCheckBox(item._id) }} />
+                                                        <label htmlFor="checkbox1"></label>
+                                                    </span>
+                                                </td>
+                                                <td>{index + 1}</td>
+                                                <td>{item.nameIncome}</td>
+                                                <td>{item.amount}$</td>
+
+                                                {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
+
+                                                <td>
+                                                    <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
+                                        )
+                                        )}
+
+
+                                </tbody>
+                            ) : (<tbody>
                                 {income.length !== 0 &&
                                     income.map((item, index) => (
                                         <tr key={index}>
                                             <td>
                                                 <span className="custom-checkbox">
                                                     <input type="checkbox" id="checkbox1" className="options[]" value="1"
-                                                        checked={selectAll || selectedIncome.includes(item._id)}
-                                                        onChange={() => { handleCheckBox(item._id) }} />
+                                                        checked={selectAll || selectedIncome.includes(item.income._id)}
+                                                        onChange={() => { handleCheckBox(item.income._id) }} />
                                                     <label htmlFor="checkbox1"></label>
                                                 </span>
                                             </td>
                                             <td>{index + 1}</td>
-                                            <td>{item.nameIncome}</td>
-                                            <td>{item.amount}$</td>
+                                            <td>{item.income.nameIncome}</td>
+                                            <td>{item.income.amount}$</td>
 
-                                            {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
+                                            <td>{username}</td>
 
                                             <td>
                                                 <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -199,9 +240,8 @@ const Income_DashBoard = () => {
                                         </tr>
                                     )
                                     )}
+                            </tbody>)}
 
-
-                            </tbody>
                         </table>
                         <div className="clearfix">
                             <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>

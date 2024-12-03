@@ -20,6 +20,7 @@ function App() {
       <Route path='expense_tracking/home/expense' element={<Expense/>}/>
       <Route path='expense_tracking/home/user' element={<User/>}/>
       <Route path='expense_tracking/home/share_table' element={<Share_Expense/>}/>
+      {/* <Route path='expense_tracking/home/share_table' element={<Pro/>}/> */}
 
     </Routes>
      </BrowserRouter>
