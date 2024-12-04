@@ -119,7 +119,6 @@ const DashBoard = (props) => {
         console.log("selected ", selectedIncome);
     };
     const handleDeleteIncomePopUp = (income) => {
-        console.log(selectedIncome);
         setSelectedIncome(income);
         setDeleteIncomePopup(true);
         setEditExpensePopup(false);
@@ -152,9 +151,11 @@ const DashBoard = (props) => {
     }
     //delete
     const handleDeleteIncome = async (event) => {
-        // event.preventDefault();
+        event.preventDefault();
         const baseURL = "http://localhost:5000/income";
         const currentUser = sessionStorage.getItem("userID");
+        console.log(currentUser);
+        
         let deleteIncome = {
             userID: currentUser,
         };
