@@ -52,7 +52,7 @@ const Login = () => {
                 
                 // sessionStorage.setItem("balance",JSON.stringify(balance));
                 console.log(user);
-               navigate("/expense_tracking/home");
+               navigate("/expense_tracking");
             }
 
 
