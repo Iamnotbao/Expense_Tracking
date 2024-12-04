@@ -12,19 +12,18 @@ const ChartComponent = (props) => {
         console.log("check expense", props.Expense);
         const groupedData = {};
         for (const item of expense) {
-            const { paymentDate, amount } = item.expense;
-            let expenseYear = new Date(paymentDate).getFullYear();
-            if (groupedData[expenseYear]) {
-                groupedData[expenseYear] += amount;
+            const { year, amount } = item.expense;
+            if (groupedData[year]) {
+                groupedData[year] += amount;
             } else {
-                groupedData[expenseYear] = amount;
+                groupedData[year] = amount;
             }
         }
         console.log("check expense ", expense);
         const processedData = Object.keys(groupedData)
-            .map(expenseYear => ({
-                expenseYear: parseInt(expenseYear, 10),
-                amount: groupedData[expenseYear],
+            .map(year => ({
+                year: parseInt(year, 10),
+                amount: groupedData[year],
             }))
             .sort((a, b) => a.year - b.year);
         setChartData(processedData);
@@ -37,7 +36,7 @@ const ChartComponent = (props) => {
         chartInstanceRef.current = new Chart(chartRef.current, {
             type: 'line',
             data: {
-                labels: chartData.map(row => row.expenseYear),
+                labels: chartData.map(row => row.year),
                 datasets: [
                     {
                         label: 'Expenses by Year',

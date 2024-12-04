@@ -12,7 +12,7 @@ const expenseSchema = new mongoose.Schema({
     paymentMethod: String,
     location: String,
     month: Number,
-    Year: Number,
+    year: Number,
     paymentDate: { type: Date, default: new Date() }
 }, { timestamps: true });
 const Expense = mongoose.model('expenses', expenseSchema);

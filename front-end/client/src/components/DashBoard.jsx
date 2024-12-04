@@ -55,6 +55,9 @@ const DashBoard = (props) => {
                 description: event.target.description.value,
                 paymentMethod: event.target.paymentMethod.value,
                 location: event.target.location.value,
+                month: event.target.month.value,
+                year: event.target.year.value,
+
             }
             const response = await axios.put((`${baseURL}`), newExpense, {
                 headers: {
@@ -151,7 +154,7 @@ const DashBoard = (props) => {
     }
     //delete
     const handleDeleteIncome = async (event) => {
-        event.preventDefault();
+      //  event.preventDefault();
         const baseURL = "http://localhost:5000/income";
         const currentUser = sessionStorage.getItem("userID");
         console.log(currentUser);
@@ -261,8 +264,8 @@ const DashBoard = (props) => {
                                         <th scope="col">Category</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Location</th>
-                                        <th scope="col">Payment Method</th>
-                                        <th scope="col">Payment Date</th>
+                                        <th scope="col">Month</th>
+                                        <th scope="col">Year</th>
                                         <th> action</th>
                                     </tr>
                                 </thead>
@@ -274,8 +277,8 @@ const DashBoard = (props) => {
                                                 <td>{item.expense.category}</td>
                                                 <td>{item.expense.amount}</td>
                                                 <td>{item.expense.location}</td>
-                                                <td>{item.expense.paymentMethod}</td>
-                                                <td>{item.expense.paymentDate}</td>
+                                                <td>{item.expense.month}</td>
+                                                <td>{item.expense.year}</td>
                                                 <td className="buttonGroup">
                                                     <a className="edit" onClick={() => { handleEditExpensePopUp(item.expense) }}>
                                                         <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
@@ -409,6 +412,14 @@ const DashBoard = (props) => {
                                     <div className="form-group">
                                         <label>location</label>
                                         <input type="text" className="form-control" defaultValue={selectExpense.location} name="location" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Month</label>
+                                        <input type="text" className="form-control" defaultValue={selectExpense.month} name="month" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Year</label>
+                                        <input type="text" className="form-control" defaultValue={selectExpense.year} name="year" required />
                                     </div>
                                 </div>
                                 <div className="modal-footer">

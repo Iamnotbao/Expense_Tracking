@@ -15,7 +15,7 @@ const Expense_DashBoard = () => {
     const role = sessionStorage.getItem("role");
     const list = sessionStorage.getItem("listExpense");
     const username = sessionStorage.getItem("username");
-    const userID= sessionStorage.getItem("userID");
+    const userID = sessionStorage.getItem("userID");
 
     // const ListofUser = JSON.parse(list);
     console.log(role);
@@ -102,7 +102,7 @@ const Expense_DashBoard = () => {
 
     const handleAdd = async (event) => {
         //app.post("/expense/create",addExpense);
-        // event.preventDefault();
+        //event.preventDefault();
         try {
             let newExpense = {
                 username: (role == 1) ? event.target.username.value : username,
@@ -111,6 +111,8 @@ const Expense_DashBoard = () => {
                 description: event.target.description.value,
                 paymentMethod: event.target.paymentMethod.value,
                 location: event.target.location.value,
+                month: event.target.month.value,
+                year: event.target.year.value,
             };
             console.log(newExpense);
             // console.log(`${baseURL}/create/${newIncome.userName}`);
@@ -129,7 +131,8 @@ const Expense_DashBoard = () => {
     }
     const handleEdit = async (event) => {
         // const {expenseId,category, amount,description,paymentMethod,location}=req.body
-        //event.preventDefault();
+        // event.preventDefault();
+        console.log(select);
         try {
             let newExpense = {
                 expenseId: select._id,
@@ -138,6 +141,8 @@ const Expense_DashBoard = () => {
                 description: event.target.description.value,
                 paymentMethod: event.target.paymentMethod.value,
                 location: event.target.location.value,
+                month: event.target.month.value,
+                year: event.target.year.value,
             }
             console.log("seleted for edit ", newExpense);
             const response = await axios.put((`${baseURL}`), newExpense, {
@@ -163,11 +168,12 @@ const Expense_DashBoard = () => {
     };
 
     const handleDelete = async () => {
-        // event.preventDefault();
+       // event.preventDefault();
         console.log("Run delete");
+        console.log(select);
         console.log(`${baseURL}/${select._id}`);
         let deleteExpense = {
-            userID: (role==1)?select.user._id:userID,
+            userID: (role == 1) ? select.user._id : userID,
         };
         try {
             const response = await axios.delete(
@@ -199,7 +205,7 @@ const Expense_DashBoard = () => {
                                     <h2>Manage <b>Expense</b></h2>
                                 </div>
                                 <div className="col-xs-6">
-                                    <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
+                                    <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Expense</span></button>
                                     <button className="btn btn-danger" data-toggle="modal" onClick={(event) => { }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
                                 </div>
                             </div>
@@ -214,9 +220,11 @@ const Expense_DashBoard = () => {
                                         </span>
                                     </th>
                                     <th>STT</th>
-                                    <th>Expense User</th>
+                                    <th>Expense name</th>
                                     <th>Amount</th>
                                     <th>User Name</th>
+                                    <th>Month</th>
+                                    <th>Year</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -238,6 +246,8 @@ const Expense_DashBoard = () => {
                                                 <td>{item.category}</td>
                                                 <td>{item.amount}$</td>
                                                 <td>{item.user.username}</td>
+                                                <td>{item.month}</td>
+                                                <td>{item.year}</td>
                                                 <td>
                                                     <a href="#editEmployeeModal" className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                     <a href="#deleteEmployeeModal" className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -264,6 +274,8 @@ const Expense_DashBoard = () => {
                                                 <td>{item.expense.amount}$</td>
 
                                                 <td>{username}</td>
+                                                <td>{item.expense.month}</td>
+                                                <td>{item.expense.year}</td>
 
                                                 <td>
                                                     <a className="edit" onClick={() => { handleEditPopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -330,6 +342,14 @@ const Expense_DashBoard = () => {
                                         <label>location</label>
                                         <input type="text" name="location" className="form-control" required></input>
                                     </div>
+                                    <div className="form-group">
+                                        <label>Month</label>
+                                        <input type="number" name="month" className="form-control" required></input>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Year</label>
+                                        <input type="number" name="year" className="form-control" required></input>
+                                    </div>
                                 </div>
                                 <div className="modal-footer">
                                     <input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel" onClick={handleCancle} />
@@ -371,6 +391,14 @@ const Expense_DashBoard = () => {
                                         <label>location</label>
                                         <input type="text" className="form-control" defaultValue={select.location} name="location" required />
                                     </div>
+                                    <div className="form-group">
+                                        <label>Month</label>
+                                        <input type="text" className="form-control" defaultValue={select.month} name="month" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Year</label>
+                                        <input type="text" className="form-control" defaultValue={select.year} name="year" required />
+                                    </div>
                                 </div>
                                 <div className="modal-footer">
                                     <input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel" onClick={handleCancle} />
@@ -391,7 +419,7 @@ const Expense_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete these Records?</p>
+                                    <p>Are you sure you want to delete {select.category}</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">

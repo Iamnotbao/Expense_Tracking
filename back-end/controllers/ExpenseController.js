@@ -20,7 +20,7 @@ const findAllExpense = async (req, res) => {
 const UpdateExpense = async (req, res) => {
     // console.log("running update");
     try {
-        const { expenseId, category, amount, description, paymentMethod, location } = req.body
+        const { expenseId, category, amount, description, paymentMethod, location,month,year } = req.body
         const result = await Expense.findOne({ _id: expenseId })
         result.category = category;
         result.amount = amount;
@@ -28,6 +28,8 @@ const UpdateExpense = async (req, res) => {
         result.paymentMethod = paymentMethod,
             result.location = location
         result.updatedAt = new Date();
+        result.month=month;
+        result.year=year;
         res.status(200).json(result);
         await result.save();
     } catch (err) {
@@ -101,7 +103,7 @@ const addExpense = async (req, res) => {
     //đây là demo add
     try {
         const { username, category, amount, description, paymentMethod, location ,month, year } = req.body;
-
+        console.log("Request Body:", req.body);
         let user = await User.findOne({username: username });
         const newExpense = new Expense({
             user: user._id,
@@ -112,7 +114,6 @@ const addExpense = async (req, res) => {
             location: location,
             month : month,
             year : year,
-            paymentDate: new Date()
         });
 
         const saveExpense = newExpense.save();
