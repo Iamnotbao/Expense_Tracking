@@ -26,8 +26,16 @@
   margin: 10px 0;
   cursor: pointer;
   margin: 20px;
+  padding: 10px;
 }
-
+.sidebar li:hover{
+  background-color: white;
+}
+.sidebar li:hover a{
+  text-decoration: none;
+  color: black;
+  background: white;
+}
 .main-content {
   flex-grow: 1;
   padding: 20px;
