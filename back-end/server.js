@@ -5,7 +5,7 @@ const { getAllUser, loginUser, registeredUser, tableUser_expense, taxDeduction, 
 const { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense } = require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
-const { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName } = require("./controllers/IncomeController");
+const { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName, DeleteMultipleIncome } = require("./controllers/IncomeController");
 const { AuthController } = require("./controllers/AuthController");
 const app = express();
 
@@ -46,8 +46,16 @@ app.get("/income", AuthController, getAllincome);
 
 app.post("/income/create", AuthController, createIncome);
 app.post("/income/create/:username", AuthController, createIncomeByUserName);
+app.delete("/income/:id", AuthController, (req, res, next) => {
+    const { id } = req.params;
+    if (id === "multi") {
+        return next(); 
+    }
+    deleteIncome(req, res);
+});
+app.delete("/income/multi",AuthController,DeleteMultipleIncome);
+;
 
-app.delete("/income/:id", AuthController, deleteIncome);
 app.put("/income", AuthController, UpdateIncome);
 
 //expense

@@ -46,7 +46,7 @@ const Income_DashBoard = () => {
         }
     }, [])
     //  console.log("select",select);
-    console.log("mulple", selectedIncome);
+
     const handleDelete = async (event) => {
         event.preventDefault();
         let deleteIncome;
@@ -64,7 +64,7 @@ const Income_DashBoard = () => {
         console.log(deleteIncome);
         try {
             const response = await axios.delete(
-                `${baseURL}/${select.income._id}`,
+                `${baseURL}/${select._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(token)}`,
@@ -84,6 +84,50 @@ const Income_DashBoard = () => {
             console.error("Error deleting income:", error);
         }
     };
+    console.log("mulple", selectedIncome);
+    const handleDeleteMultiple = async () => {
+        event.preventDefault();
+        console.log("kkk");
+
+        let deleteMulti;
+        if (role == 1) {
+            deleteMulti = {
+                userID: selectedIncome.user._id,
+            };
+        }
+        else {
+            deleteMulti = {
+                userID: selectedIncome[0].income.user,
+            };
+        }
+        console.log("this", deleteMulti);
+        try {
+            const response = await axios.delete(
+                `${baseURL}/multi`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(token)}`,
+                    },
+                    data: {
+                        listIncome: selectedIncome,
+                        userID: deleteMulti.userID
+                    }
+                }
+            );
+
+            if (response.data) {
+                console.log("result", response.data);
+
+                setIncome(response.data.listIncome)
+
+                handleCancle();
+            }
+        } catch (error) {
+            console.error("Error deleting income:", error);
+        }
+    };
+
+
 
 
 
@@ -146,13 +190,14 @@ const Income_DashBoard = () => {
         setEdit(false);
         setDeleteP(false)
     }
-    const handleCheckBox = (id) => {
+    const handleCheckBox = (item) => {
         setSelectedIncome((prevSelected) => {
-            return prevSelected.includes(id)
-                ? prevSelected.filter((item) => item !== id)
-                : [...prevSelected, id];
-        })
-    }
+            const isItemSelected = prevSelected.some((selectedItem) => selectedItem._id === item._id);
+            return isItemSelected
+                ? prevSelected.filter((selectedItem) => selectedItem._id !== item._id)
+                : [...prevSelected, item];
+        });
+    };
     const handleSelectAll = () => {
         if (selectAll) {
             setSelectedIncome([]);
@@ -203,7 +248,7 @@ const Income_DashBoard = () => {
                                 </div>
                                 <div className="col-xs-6">
                                     <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Income</span></button>
-                                    <button className="btn btn-danger" data-toggle="modal" onClick={(event) => { handleDeletePopUp(event) }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
+                                    <button className="btn btn-danger" data-toggle="modal" onClick={handleDeleteMultiple}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
                                 </div>
                             </div>
                         </div>
@@ -234,19 +279,19 @@ const Income_DashBoard = () => {
                                                     <span className="custom-checkbox">
                                                         <input type="checkbox" id="checkbox1" className="options[]" value="1"
                                                             checked={selectAll || selectedIncome.includes(item._id)}
-                                                            onChange={() => { handleCheckBox(item._id) }} />
+                                                            onChange={() => { handleCheckBox(item) }} />
                                                         <label htmlFor="checkbox1"></label>
                                                     </span>
                                                 </td>
                                                 <td>{index + 1}</td>
-                                                <td>{item.income.nameIncome}</td>
-                                                <td>{item.income.amount}$</td>
+                                                <td>{item.nameIncome}</td>
+                                                <td>{item.amount}$</td>
 
                                                 {item.user && (item.user.username) ? (<td>{item.user.username}</td>) : (<td>Loading....</td>)}
-
+                                                <td>{item.month}</td>
+                                                <td>{item.Year}</td>
                                                 <td>
-                                                    <td>{item.income.month}</td>
-                                                    <td>{item.income.Year}</td>
+                                                   
                                                     <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                     <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                                 </td>
@@ -263,8 +308,8 @@ const Income_DashBoard = () => {
                                             <td>
                                                 <span className="custom-checkbox">
                                                     <input type="checkbox" id="checkbox1" className="options[]" value="1"
-                                                        checked={selectAll || selectedIncome.includes(item.income._id)}
-                                                        onChange={() => { handleCheckBox(item.income._id) }} />
+                                                        checked={selectAll || selectedIncome.some((selectedItem) => selectedItem._id === item._id)}
+                                                        onChange={() => handleCheckBox(item)} />
                                                     <label htmlFor="checkbox1"></label>
                                                 </span>
                                             </td>
@@ -379,7 +424,7 @@ const Income_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete <span><b>{select.income.nameIncome}</b></span> ?</p>
+                                    <p>Are you sure you want to delete <span><b>{select.nameIncome}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">

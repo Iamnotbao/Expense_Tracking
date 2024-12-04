@@ -34,7 +34,7 @@ const Login = () => {
             console.log(response.data);
             if (response.data) {
                 const token = response.data.accessToken;
-                console.log(token);
+                console.log(response.data);
                 const user = response.data.user;
                 const userID = response.data.userID;
                 const balance = response.data.balance;

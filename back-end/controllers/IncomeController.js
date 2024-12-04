@@ -102,18 +102,31 @@ const deleteIncome = async (req, res) => {
 
 const DeleteMultipleIncome = async (req, res) => {
 
-    const { listIncome, userID } = req.boby
 
+    const { listIncome, userID } = req.body
     const userExist = await User.findOne({ _id: userID });
 
+    console.log("income list ", listIncome);
+    console.log("user list:",userExist.listIncome);
+    
+    
     for (const income of listIncome) {
-
-        userExist.listIncome.deleteOne({ _id: income._id });
-        const response = await Income.deleteOne({ _id: income._id })
+        const incomeId = new mongoose.Types.ObjectId(income.income._id);
+        await User.updateOne(
+            { _id: userID },
+            { $pull: { listIncome: { income: income.income._id } } }
+        );
+        await Income.deleteOne({ _id: incomeId })
 
     }
+    console.log("after delete: ",userExist.listIncome);
+    
 
-    await userExist.save();
+    return res.status(200).json({
+        success:"true"
+        ,message:"Delete multiple successful!!!",
+        listIncome: userExist.listIncome
+    })
 
 }
 
@@ -150,4 +163,4 @@ const UpdateIncome = async (req, res) => {
 };
 
 
-module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName, }
+module.exports = { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName,DeleteMultipleIncome }
