@@ -100,22 +100,22 @@ const deleteUser = async (req, res) => {
     // Tìm và xóa người dùng trong một bước với findOneAndDelete
     const result1 = await User.findOne({ _id: userID });
     if (result1.listIncome != null) {
-    
+
       for (const item of result1.listIncome) {
 
-        console.log("check item",item.income._id);
-        
-         await Income.deleteOne({ _id: item.income._id });
+        console.log("check item", item.income._id);
+
+        await Income.deleteOne({ _id: item.income._id });
 
       }
 
     }
     if (result1.listExpense != null) {
-    
-      
+
+
       for (const item of result1.listExpense) {
-        console.log("check item",item.expense._id);
-         await Expense.deleteOne({ _id: item.expense._id});
+        console.log("check item", item.expense._id);
+        await Expense.deleteOne({ _id: item.expense._id });
 
       }
 
@@ -243,8 +243,9 @@ async function taxDeduction(req, res) {
 
   const { userID } = req.body;
   const user = await User.findOne({ _id: userID });
-  Budget(userID);
-  let total = user.balance;
+
+  const table = new Map();
+  let tableout = new Map();
 
   const taxTable = new Map();
   const array = [];
@@ -265,26 +266,58 @@ async function taxDeduction(req, res) {
   taxTable.set(52000000, 0.25);
   taxTable.set(80000000, 0.3);
 
+  for (const income of user.listIncome) {
+    const input = await Income.findOne({ _id: income.income });
 
-  let taxTableIncome = total - 11000000 * 12 - 1500000 * 12;
-  let taxIncome = 0;
-
-  if (taxTableIncome > 0) {
-    for (let index = 1; index < array.length; index++) {
-
-      taxIncome = taxIncome + (Math.min((array[index] - array[index - 1]), taxTableIncome) * taxTable.get(array[index]))
-
-      taxTableIncome = taxTableIncome - (array[index] - array[index - 1])
-
-      taxTableIncome = Math.max(taxTableIncome, 0)
-
+    if (table.get(input.month) == null) {
+      table.set(input.month, input.amount);
+    } else {
+      table.set(input.month, table.get(input.month) + input.amount);
     }
   }
-  console.log(taxIncome);
+  // console.log(table.keys);
+
+  const keysArray = Array.from(table.keys())
+
+  for (const key of keysArray) {
+
+
+    let total = table.get(key);
+    const valueOftableout = [];
+    valueOftableout.push(total)
+
+
+
+
+
+    let taxTableIncome = total - 11000000 - 1500000;
+    let taxIncome = 0;
+
+    if (taxTableIncome > 0) {
+      for (let index = 1; index < array.length; index++) {
+
+        taxIncome = taxIncome + (Math.min((array[index] - array[index - 1]), taxTableIncome) * taxTable.get(array[index]))
+
+        taxTableIncome = taxTableIncome - (array[index] - array[index - 1])
+
+        taxTableIncome = Math.max(taxTableIncome, 0)
+
+      }
+    }
+    valueOftableout.push(taxIncome)
+    valueOftableout.push(valueOftableout[0] - taxIncome);
+    tableout.set(key, valueOftableout);
+    // console.log(taxIncome);
+  }
+
+  console.log(tableout);
+  
+
+  const obj = Object.fromEntries(tableout)
 
   return res.status(200).json({
     success: true,
-    taxIncome
+    table12: obj,
   });
 
 
