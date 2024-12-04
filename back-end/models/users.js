@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    phone: Number,
+    phone: String,
     create_at: {
         type: Date,
         default: new Date()
