@@ -15,9 +15,9 @@ const Expense_DashBoard = () => {
     const role = sessionStorage.getItem("role");
     const list = sessionStorage.getItem("listExpense");
     const username = sessionStorage.getItem("username");
+    const userID= sessionStorage.getItem("userID");
 
-
-    const ListofUser = JSON.parse(list);
+    // const ListofUser = JSON.parse(list);
     console.log(role);
     //console.log(expense);
     //console.log("check selected"+ selectedExpense);
@@ -59,9 +59,36 @@ const Expense_DashBoard = () => {
                 }
             }
             fetchData();
-
         } else {
-            setExpense(ListofUser);
+            const fetchExpenseData = async () => {
+                const inforURL = "http://localhost:5000/getInfor";
+                const currentID = sessionStorage.getItem("userID");
+                if (!currentID || !token) {
+                    console.error("User ID or token is missing in sessionStorage.");
+                    return;
+                } else {
+                    console.log("current Id: ", currentID);
+                }
+
+                try {
+                    const response = await axios.get(`${inforURL}/${currentID}`, {
+                        headers: {
+                            "Authorization": `Bearer ${JSON.parse(token)}`
+                        }
+                    });
+
+                    if (response.status === 200) {
+                        // console.log("get infor", response.data);
+                        setExpense(response.data.listExpense);
+                        sessionStorage.setItem("listExpense", response.data.listExpense);
+                    } else {
+                        console.error("No income data found or error response:", response);
+                    }
+                } catch (error) {
+                    console.error("Error fetching income data:", error);
+                }
+            }
+            fetchExpenseData();
         }
 
     }, [])
@@ -78,13 +105,14 @@ const Expense_DashBoard = () => {
         // event.preventDefault();
         try {
             let newExpense = {
-                username: event.target.username.value,
+                username: (role == 1) ? event.target.username.value : username,
                 category: event.target.category.value,
                 amount: event.target.amount.value,
                 description: event.target.description.value,
                 paymentMethod: event.target.paymentMethod.value,
                 location: event.target.location.value,
             };
+            console.log(newExpense);
             // console.log(`${baseURL}/create/${newIncome.userName}`);
             const response = await axios.post(`${baseURL}/create`, newExpense, {
                 headers: {
@@ -111,7 +139,8 @@ const Expense_DashBoard = () => {
                 paymentMethod: event.target.paymentMethod.value,
                 location: event.target.location.value,
             }
-            const response = await axios.put((`${baseURL}/${select._id}`), newExpense, {
+            console.log("seleted for edit ", newExpense);
+            const response = await axios.put((`${baseURL}`), newExpense, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
                 },
@@ -138,7 +167,7 @@ const Expense_DashBoard = () => {
         console.log("Run delete");
         console.log(`${baseURL}/${select._id}`);
         let deleteExpense = {
-            userID: select.user._id
+            userID: (role==1)?select.user._id:userID,
         };
         try {
             const response = await axios.delete(
@@ -231,14 +260,14 @@ const Expense_DashBoard = () => {
                                                     </span>
                                                 </td>
                                                 <td>{index + 1}</td>
-                                                <td>{item.expense.nameIncome}</td>
+                                                <td>{item.expense.category}</td>
                                                 <td>{item.expense.amount}$</td>
 
                                                 <td>{username}</td>
 
                                                 <td>
-                                                    <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                                    <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                    <a className="edit" onClick={() => { handleEditPopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a className="delete" onClick={() => { handleDeletePopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                                 </td>
                                             </tr>
                                         )
@@ -274,10 +303,13 @@ const Expense_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" onClick={handleCancle}>&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <div className="form-group">
-                                        <label>username</label>
-                                        <input type="text" name="username" className="form-control" required />
-                                    </div>
+                                    {role == 1 &&
+                                        <div className="form-group">
+                                            <label>username</label>
+                                            <input type="text" name="username" className="form-control" required />
+                                        </div>
+                                    }
+
                                     <div className="form-group">
                                         <label>category</label>
                                         <input type="text" name="category" className="form-control" required />
