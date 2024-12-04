@@ -41,8 +41,8 @@ const UpdateExpense = async (req, res) => {
 //tìm expense bằng UserId
 const findExpenseByUserId = async (req, res) => {
     try {
-        const user = req.params.id;
-        const expenses = await Expense.find({ userId: userId });
+        const userID = req.body;
+        const expenses = await Expense.find({ userID: userID });
         if (expenses.length > 0) {
             console.log('Expenses found:', expenses);
             res.json(expenses);

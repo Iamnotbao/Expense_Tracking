@@ -44,12 +44,12 @@ const DashBoard = (props) => {
     };
     const handleEditExpense = async (event) => {
         // const {expenseId,category, amount,description,paymentMethod,location}=req.body
-        event.preventDefault();
+       // event.preventDefault();
         console.log("selected Expense ", selectExpense);
         const baseURL = "http://localhost:5000/expense";
         try {
             let newExpense = {
-                expenseId: selectExpense.expense._id,
+                expenseId: selectExpense._id,
                 category: event.target.category.value,
                 amount: event.target.amount.value,
                 description: event.target.description.value,
@@ -195,10 +195,7 @@ const DashBoard = (props) => {
 
             if (response.status === 200) {
                 console.log("get infor", response.data);
-               
-               
                 setIncome(response.data.listIncome);
-              
                 setExpense(response.data.listExpense);
             } else {
                 console.error("No income data found or error response:", response);
@@ -242,11 +239,11 @@ const DashBoard = (props) => {
                         <div className="chart row">
                         <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px", marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Chart</h1>
                             <div style={{ width: '100%', height: '100%' }}>
-                                <ChartComponent Income={income.income} Expense={expense.expense} />
+                                <ChartComponent Income={income} Expense={expense} />
 
                             </div>
                             <div style={{ width: '100%', height: '100%' }}>
-                                <Chart_Income Income={income} Expense={expense.expense} />
+                                <Chart_Income Income={income} Expense={expense} />
                             </div>
 
                         </div>
