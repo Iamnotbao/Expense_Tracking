@@ -50,7 +50,7 @@ const MainPage = () => {
       <ToastContainer />
       <Sidebar />
       <div className="main-content">
-        <h1 style={{ fontSize: "30px", fontWeight: "bold", width: "400px", wordWrap: "break-word" }}>Project Expense Tracking Software</h1>
+        <h1 style={{ fontSize: "20px", fontWeight: "bold", width: "400px", wordWrap: "break-word" }}>Project Expense Tracking Software</h1>
         <DashBoard IncomeNumber={income} BalanceNumber={balance} ExpenseNumber={expense} />
       </div>
     </div>

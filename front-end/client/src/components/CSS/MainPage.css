@@ -2,11 +2,11 @@
 .app {
   display: flex;
   font-family: 'Roboto', sans-serif;
-
+  color: #686868;
 }
 
 .sidebar {
-  margin-top: 50px;
+
   width: 250px;
   background-color: #5200BB;
   color: white;

@@ -240,6 +240,7 @@ const DashBoard = (props) => {
                             </div>
                         </div>
                         <div className="chart row">
+                        <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px", marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Chart</h1>
                             <div style={{ width: '100%', height: '100%' }}>
                                 <ChartComponent Income={income.income} Expense={expense.expense} />
 
@@ -253,9 +254,8 @@ const DashBoard = (props) => {
                     </div>
                 </div>
                 <div className="col-md-6 right-col">
-                    <h1>Manage Balance</h1>
                     <div className="infoTable">
-
+                    <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px", marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Expense Statistic</h1>
                         <div className="expenseTable">
                             <table className="table">
                                 <thead className="table-dark">
@@ -295,6 +295,7 @@ const DashBoard = (props) => {
                             </table>
                         </div>
                         <div className="incomeTable">
+                        <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px",marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Income Statistic</h1>
                             <table className="table">
                                 <thead className="table-dark">
                                     <tr>

@@ -424,7 +424,7 @@ const Income_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete <span><b>{select.nameIncome}</b></span> ?</p>
+                                    <p>Are you sure you want to delete <span><b>{(role==1)?(select.nameIncome):(select.income.nameIncome)}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">
