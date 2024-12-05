@@ -2,12 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const Tax_DashBoard=()=>{
-    const[data,setData] = useState([]);
+    const[data,setData] = useState(new Map());
     const baseURL = "http://localhost:5000/taxDeduction"
     const token =sessionStorage.getItem("token");
     const userID = sessionStorage.getItem("userID");
+    // console.log("Type of data:", data instanceof Map); // true nếu `data` là Map
+    // console.log(typeof data);
+
+    console.log("data ",data);
     console.log(userID);
-    
+    console.log("fetch data key ", Array.from(data.keys()));
+    console.log("fetch data values:", Array.from(data.values()));   
+    // if (Array.isArray(data)) {
+    //     console.log("Data is an Array");
+    //   }
+      
     useEffect(()=>{
         const fetch= async()=>{
 try {
@@ -17,7 +26,7 @@ try {
         },userID
     })
     if(response.data){
-        setData(response.data.table12)
+        setData(new Map(Object.entries(response.data.table12)));
     }
     console.log("tax",response.data);
     
@@ -56,20 +65,16 @@ return( <>
                     </thead>
                     <tbody>
                         {data ? (
-                            data.map((item, index) => (
+                           Array.from(data).map(([key, value], index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{item[index].username}</td>
+                                    <td>{key}</td>
                                     <td>
-                                        {item.listExpense.length !== 0 ? (item.listExpense.map((ex) => (
-                                            (ex.expense) ? (<p key={ex.expense._id}>{ex.expense.category}</p>) : ("loading")
-                                        ))) : ("loading")}
+                                        {value[0]}
                                     </td>
-                                    <td>{item.expense}</td>
+                                     <td>{value[1]}</td>
                                     <td>
-                                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                    {value[2]}
                                     </td>
                                 </tr>
                             ))

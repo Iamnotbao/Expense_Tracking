@@ -106,7 +106,7 @@ const Expense_DashBoard = () => {
         let deleteMulti;
         if (role == 1) {
             deleteMulti = {
-                userID: selectedExpense.user,
+                userID: selectedExpense.user_id,
             };
         }
         else {
@@ -296,7 +296,7 @@ const Expense_DashBoard = () => {
                                 </tbody>
                             ) : (
                                 <tbody>
-                                    {expense.length !== 0 &&
+                                    {expense &&
                                         expense.map((item, index) => (
                                             <tr key={index}>
                                                 <td>

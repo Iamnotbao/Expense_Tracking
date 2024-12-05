@@ -57,7 +57,7 @@ const Income_DashBoard = () => {
         }
         else {
             deleteIncome = {
-                userID: select.income.user,
+                userID: select.user,
             };
         }
         console.log("this", deleteIncome);
@@ -130,7 +130,7 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-      //event.preventDefault();
+      event.preventDefault();
         let newEdit = { 
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
@@ -160,7 +160,7 @@ const Income_DashBoard = () => {
                     return i;
                 });
 
-
+                console.log("update ",updatedIncome);
                 setIncome(updatedIncome);
                 handleCancle();
             }
