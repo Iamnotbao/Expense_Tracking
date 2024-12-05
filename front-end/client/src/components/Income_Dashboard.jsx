@@ -86,7 +86,7 @@ const Income_DashBoard = () => {
     };
     console.log("mulple", selectedIncome);
     const handleDeleteMultiple = async () => {
-        event.preventDefault();
+       // event.preventDefault();
         console.log("kkk");
 
         let deleteMulti;
@@ -117,9 +117,7 @@ const Income_DashBoard = () => {
 
             if (response.data) {
                 console.log("result", response.data);
-
-                setIncome(response.data.listIncome)
-
+                setIncome(response.data.listIncome);
                 handleCancle();
             }
         } catch (error) {
@@ -132,11 +130,11 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-        event.preventDefault();
-        let newEdit = {
+      //event.preventDefault();
+        let newEdit = { 
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
-            idIncome: select.income._id
+            idIncome: select._id
         }
         console.log("New Edit Data:", newEdit);
 
@@ -322,8 +320,8 @@ const Income_DashBoard = () => {
                                             <td>{item.income.Year}</td>
 
                                             <td>
-                                                <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                                <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                <a className="edit" onClick={() => { handleEditPopUp(item.income) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                <a className="delete" onClick={() => { handleDeletePopUp(item.income) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                             </td>
                                         </tr>
                                     )
@@ -397,11 +395,11 @@ const Income_DashBoard = () => {
                                 <div className="modal-body">
                                     <div className="form-group">
                                         <label htmlFor="nameIncome">Income Name</label>
-                                        <input type="text" className="form-control" name="nameIncome" defaultValue={select.income.nameIncome} required id="nameIncome" />
+                                        <input type="text" className="form-control" name="nameIncome" defaultValue={select.nameIncome} required id="nameIncome" />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="amount">Amount</label>
-                                        <input type="number" name="amount" className="form-control" defaultValue={select.income.amount} required id="amount" />
+                                        <input type="number" name="amount" className="form-control" defaultValue={select.amount} required id="amount" />
                                     </div>
 
                                 </div>
@@ -424,7 +422,7 @@ const Income_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete <span><b>{(role==1)?(select.nameIncome):(select.income.nameIncome)}</b></span> ?</p>
+                                    <p>Are you sure you want to delete <span><b>{(role==1)?(select.nameIncome):(select.nameIncome)}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">

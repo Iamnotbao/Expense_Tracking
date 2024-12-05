@@ -1,6 +1,8 @@
 const { model } = require('mongoose');
 const Expense = require('../models/expense');
 const User = require('../models/users');
+const mongoose = require("mongoose");
+
 // lấy tất cả expense
 const findAllExpense = async (req, res) => {
     let expenses;
@@ -20,7 +22,7 @@ const findAllExpense = async (req, res) => {
 const UpdateExpense = async (req, res) => {
     // console.log("running update");
     try {
-        const { expenseId, category, amount, description, paymentMethod, location,month,year } = req.body
+        const { expenseId, category, amount, description, paymentMethod, location, month, year } = req.body
         const result = await Expense.findOne({ _id: expenseId })
         result.category = category;
         result.amount = amount;
@@ -28,8 +30,8 @@ const UpdateExpense = async (req, res) => {
         result.paymentMethod = paymentMethod,
             result.location = location
         result.updatedAt = new Date();
-        result.month=month;
-        result.year=year;
+        result.month = month;
+        result.year = year;
         res.status(200).json(result);
         await result.save();
     } catch (err) {
@@ -61,10 +63,9 @@ const findExpenseByUserId = async (req, res) => {
 const deleteExpenseById = async (req, res) => {
     try {
         //func deleteExpenseById, {id}
-        
         const { userID } = req.body;
-        console.log("user Id ",userID);
-        console.log("param ",req.params.id);
+        console.log("user Id ", userID);
+        console.log("param ", req.params.id);
         const userExist = await User.findOne({ _id: userID });
         if (!userExist) {
             return res.status(404).send({ message: "User not found" });
@@ -84,7 +85,6 @@ const deleteExpenseById = async (req, res) => {
                 }
             }
         });
-
         userExist.listExpense = newlist;
         res.json(userExist);
         await userExist.save();
@@ -102,9 +102,9 @@ const deleteExpenseById = async (req, res) => {
 const addExpense = async (req, res) => {
     //đây là demo add
     try {
-        const { username, category, amount, description, paymentMethod, location ,month, year } = req.body;
+        const { username, category, amount, description, paymentMethod, location, month, year } = req.body;
         console.log("Request Body:", req.body);
-        let user = await User.findOne({username: username });
+        let user = await User.findOne({ username: username });
         const newExpense = new Expense({
             user: user._id,
             category: category,
@@ -112,8 +112,8 @@ const addExpense = async (req, res) => {
             description: description,
             paymentMethod: paymentMethod,
             location: location,
-            month : month,
-            year : year,
+            month: month,
+            year: year,
         });
 
         const saveExpense = newExpense.save();
@@ -129,20 +129,37 @@ const addExpense = async (req, res) => {
         });
     }
 }
-const  DeleteMultipleIncome = async(req,res) => {
+const DeleteMultipleExpense = async (req, res) => {
+    try {
+        console.log("in delete multi expense");
+        const { listExpense, userID } = req.body;
+        if (!listExpense || !userID) {
+            return res.status(400).json({ message: "lack information" });
+        }
+        const userExist = await User.findOne({ _id: userID }).populate('listExpense.expense');
 
-    const { listExpense , userID} = req.boby
+        if (!userExist) {
+            return res.status(404).json({ message: "user not found" });
+        }
+        for (const expense of listExpense) {
+            const expenseId = new mongoose.Types.ObjectId(expense._id);
+            await User.updateOne(
+                { _id: userID },
+                { $pull: { listExpense: { expense: expense._id } } }
+            );
+            await Expense.deleteOne({ _id: expenseId })
+    
+        }
+        // console.log("after delete: ",userExist.listExpense);
+        await userExist.save();
+        res.status(200).json(userExist.listExpense);
 
-    const userExist = await User.findOne({ _id: userID });
-
-    for( const expense of listExpense ){
-            userExist.listExpense.deleteOne({_id : expense._id});
-            const response = await Expense.deleteOne({_id : expense._id})
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "delete error", error: error.message });
     }
-
-    await userExist.save();
-
 }
 
 
-module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense, }
+module.exports = { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense, DeleteMultipleExpense }

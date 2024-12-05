@@ -2,7 +2,7 @@
 const { database } = require("./config/db");
 const express = require("express");
 const { getAllUser, loginUser, registeredUser, tableUser_expense, taxDeduction, GetInfoByUserId, NotificationBudget, editUser, deleteUser } = require("./controllers/UserController");
-const { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense } = require("./controllers/ExpenseController");
+const { addExpense, findAllExpense, findExpenseByUserId, deleteExpenseById, UpdateExpense, DeleteMultipleExpense } = require("./controllers/ExpenseController");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
 const { getAllincome, createIncome, deleteIncome, UpdateIncome, createIncomeByUserName, DeleteMultipleIncome } = require("./controllers/IncomeController");
@@ -63,7 +63,7 @@ app.put("/income", AuthController, UpdateIncome);
 app.get("/expense", AuthController, findAllExpense);
 app.post("/expense", AuthController, findExpenseByUserId);
 app.put("/expense", AuthController, UpdateExpense);
-app.delete("/expense/:id", AuthController, deleteExpenseById);
 app.post("/expense/create", AuthController, addExpense);
-
+app.delete("/expense/multi",AuthController,DeleteMultipleExpense);
+app.delete("/expense/:id", AuthController, deleteExpenseById);
 

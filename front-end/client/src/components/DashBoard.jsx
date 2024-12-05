@@ -13,7 +13,6 @@ const DashBoard = (props) => {
     const [selectExpense, setSelectedExpense] = useState(null);
     const [editExpensePopup, setEditExpensePopup] = useState(false);
     const [deleteExpensePopup, setDeleteExpensePopup] = useState(false);
-
     const [editIncomePopup, setEditIncomePopup] = useState(false);
     const [deleteIncomePopup, setDeleteIncomePopup] = useState(false);
     // const balance = sessionStorage.getItem("balance")
@@ -44,7 +43,7 @@ const DashBoard = (props) => {
     };
     const handleEditExpense = async (event) => {
         // const {expenseId,category, amount,description,paymentMethod,location}=req.body
-       // event.preventDefault();
+        // event.preventDefault();
         console.log("selected Expense ", selectExpense);
         const baseURL = "http://localhost:5000/expense";
         try {
@@ -73,9 +72,9 @@ const DashBoard = (props) => {
         };
     }
     const handleDeleteExpense = async (event) => {
-       // event.preventDefault();
+        // event.preventDefault();
         console.log(selectExpense);
-        console.log("user Id "+selectExpense.user);
+        console.log("user Id " + selectExpense.user);
         const baseURL = "http://localhost:5000/expense";
 
         console.log("Run delete");
@@ -126,7 +125,8 @@ const DashBoard = (props) => {
         setDeleteIncomePopup(true);
         setEditExpensePopup(false);
         setDeleteExpensePopup(false);
-        setDeleteIncomePopup(false);
+        setEditIncomePopup(false);
+        console.log(deleteIncomePopup);
     };
 
     const handleEditIncome = async (event) => {
@@ -154,11 +154,11 @@ const DashBoard = (props) => {
     }
     //delete
     const handleDeleteIncome = async (event) => {
-      //  event.preventDefault();
+        //  event.preventDefault();
         const baseURL = "http://localhost:5000/income";
         const currentUser = sessionStorage.getItem("userID");
         console.log(currentUser);
-        
+
         let deleteIncome = {
             userID: currentUser,
         };
@@ -215,8 +215,8 @@ const DashBoard = (props) => {
 
         console.log('Updated Income:', income);
         console.log('Updated Expense:', expense);
-        sessionStorage.setItem("listIncome",JSON.stringify(income));
-        sessionStorage.setItem("listExpense",JSON.stringify(expense));
+        sessionStorage.setItem("listIncome", JSON.stringify(income));
+        sessionStorage.setItem("listExpense", JSON.stringify(expense));
 
     }, [income, expense]);
 
@@ -240,7 +240,7 @@ const DashBoard = (props) => {
                             </div>
                         </div>
                         <div className="chart row">
-                        <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px", marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Chart</h1>
+                            <h1 style={{ fontWeight: "bold", fontSize: "20px", textShadow: "2px", marginBottom: "20px" }}><i class="fa-solid fa-star"></i>Chart</h1>
                             <div style={{ width: '100%', height: '100%' }}>
                                 <ChartComponent Income={income} Expense={expense} />
 
@@ -255,7 +255,7 @@ const DashBoard = (props) => {
                 </div>
                 <div className="col-md-6 right-col">
                     <div className="infoTable">
-                    <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px", marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Expense Statistic</h1>
+                        <h1 style={{ fontWeight: "bold", fontSize: "20px", textShadow: "2px", marginBottom: "20px" }}><i class="fa-solid fa-star"></i>Expense Statistic</h1>
                         <div className="expenseTable">
                             <table className="table">
                                 <thead className="table-dark">
@@ -295,7 +295,7 @@ const DashBoard = (props) => {
                             </table>
                         </div>
                         <div className="incomeTable">
-                        <h1 style={{fontWeight:"bold", fontSize:"20px",textShadow:"2px",marginBottom:"20px"}}><i class="fa-solid fa-star"></i>Income Statistic</h1>
+                            <h1 style={{ fontWeight: "bold", fontSize: "20px", textShadow: "2px", marginBottom: "20px" }}><i class="fa-solid fa-star"></i>Income Statistic</h1>
                             <table className="table">
                                 <thead className="table-dark">
                                     <tr>
@@ -365,7 +365,7 @@ const DashBoard = (props) => {
                 <div id="deleteModal" className="modal_active" tabIndex="-1" role="dialog" >
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <form onSubmit={handleDeleteIncome}>
+                            <form onSubmit={(event) => { handleDeleteIncome(event) }}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">Delete Income</h4>
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>

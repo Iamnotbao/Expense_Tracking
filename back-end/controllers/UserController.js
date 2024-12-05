@@ -69,9 +69,8 @@ const registeredUser = async (req, res) => {
   }
 }
 const editUser = async (req, res) => {
-
   const { userID, username, email, phone, address, role_id } = req.body;
-  console.log("Received data:", { userID, username, email, phone, address, role_id });
+  console.log("Received edit data:", { userID, username, email, phone, address, role_id });
   const ExistUser = await User.findOne({ _id: userID });
   try {
     if (ExistUser) {
@@ -84,7 +83,7 @@ const editUser = async (req, res) => {
       return res.status(200).json(ExistUser);
     }
   } catch (error) {
-    return res.status(500).send("error while editting");
+    return res.status(500).send(error);
   }
 }
 const deleteUser = async (req, res) => {

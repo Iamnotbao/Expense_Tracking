@@ -92,13 +92,51 @@ const Expense_DashBoard = () => {
         }
 
     }, [])
-    const handleCheckBox = (id) => {
+    const handleCheckBox = (item) => {
         setSelectedExpense((prevSelected) => {
-            return prevSelected.includes(id)
-                ? prevSelected.filter((item) => item !== id)
-                : [...prevSelected, id];
-        })
+            const isItemSelected = prevSelected.some((selectedItem) => selectedItem._id === item._id);
+            return isItemSelected
+                ? prevSelected.filter((selectedItem) => selectedItem._id !== item._id)
+                : [...prevSelected, item];
+        });
     }
+    const handleDeleteMultiple = async () => {
+       // event.preventDefault();
+        console.log("run multi expense ", selectedExpense);
+        let deleteMulti;
+        if (role == 1) {
+            deleteMulti = {
+                userID: selectedExpense.user,
+            };
+        }
+        else {
+            deleteMulti = {
+                userID: selectedExpense[0].user,
+            };
+        }
+        console.log("this", deleteMulti);
+        try {
+            const response = await axios.delete(
+                `${baseURL}/multi`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(token)}`,
+                    },
+                    data: {
+                        listExpense: selectedExpense,
+                        userID: deleteMulti.userID
+                    }
+                }
+            );
+            if (response.data) {
+                console.log("result", response.data);
+                setExpense(response.data.listExpense)
+                handleCancle();
+            }
+        } catch (error) {
+            console.error("Error deleting income:", error);
+        }
+    };
 
     const handleAdd = async (event) => {
         //app.post("/expense/create",addExpense);
@@ -168,7 +206,7 @@ const Expense_DashBoard = () => {
     };
 
     const handleDelete = async () => {
-       // event.preventDefault();
+        // event.preventDefault();
         console.log("Run delete");
         console.log(select);
         console.log(`${baseURL}/${select._id}`);
@@ -206,7 +244,7 @@ const Expense_DashBoard = () => {
                                 </div>
                                 <div className="col-xs-6">
                                     <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Expense</span></button>
-                                    <button className="btn btn-danger" data-toggle="modal" onClick={(event) => { }}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button>
+                                    {/* <button className="btn btn-danger" data-toggle="modal" onClick={handleDeleteMultiple}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button> */}
                                 </div>
                             </div>
                         </div>
@@ -237,8 +275,8 @@ const Expense_DashBoard = () => {
                                                     <span className="custom-checkbox">
                                                         <input type="checkbox" id="checkbox1" className="options[]"
                                                             value="1"
-                                                            checked={selectAll || selectedExpense.includes(item._id)}
-                                                            onChange={() => { handleCheckBox(item._id) }} />
+                                                            checked={selectAll || selectedExpense.includes(item)}
+                                                            onChange={() => { handleCheckBox(item) }} />
                                                         <label htmlFor="checkbox1"></label>
                                                     </span>
                                                 </td>
@@ -264,8 +302,8 @@ const Expense_DashBoard = () => {
                                                 <td>
                                                     <span className="custom-checkbox">
                                                         <input type="checkbox" id="checkbox1" className="options[]" value="1"
-                                                            checked={selectAll || selectedExpense.includes(item.expense._id)}
-                                                            onChange={() => { handleCheckBox(item.expense._id) }} />
+                                                            checked={selectAll || selectedExpense.includes(item.expense)}
+                                                            onChange={() => { handleCheckBox(item.expense) }} />
                                                         <label htmlFor="checkbox1"></label>
                                                     </span>
                                                 </td>

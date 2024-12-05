@@ -51,7 +51,7 @@ const User_DashBoard = () => {
     //edit User
 
     const handleEditUser = async (event) => {
-        // event.preventDefault();
+         //event.preventDefault();
         try {
             const baseURL = "http://localhost:5000/editUser";
             //  const { userID, username, email, phone, address, role_id } = req.body;
@@ -70,7 +70,11 @@ const User_DashBoard = () => {
                 address: address,
                 role_id: role_id,
             }
-            const response = await axios.put(`${baseURL}`, postData,)
+            const response = await axios.put(`${baseURL}`, postData,{
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                },
+            })
             if (response.data) {
                 console.log("user editted successfully:", response.data);
                 handleCancle(); // Gọi hàm hủy hoặc reset form

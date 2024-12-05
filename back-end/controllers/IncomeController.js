@@ -105,7 +105,7 @@ const DeleteMultipleIncome = async (req, res) => {
 
 
     const { listIncome, userID } = req.body
-    const userExist = await User.findOne({ _id: userID });
+    const userExist = await User.findOne({ _id: userID }).populate('listIncome.income');
 
     console.log("income list ", listIncome);
     console.log("user list:",userExist.listIncome);
