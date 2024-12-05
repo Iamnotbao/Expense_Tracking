@@ -47,14 +47,14 @@ const Share_Expense_Table = () => {
                             </thead>
                             <tbody>
                                 {listOfUser ? (
-                                    listOfUser.map((item,index) => (
+                                    listOfUser.map((item, index) => (
                                         <tr key={item.id}>
-                                            <td>{index+1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{item.username}</td>
                                             <td>
-                                            {item.listExpense.length !==0 ? (item.listExpense.map((ex)=>(
-                                                <p key={ex.expense._id}>{ex.expense.category}</p>
-                                            ))):("loading") }
+                                                {item.listExpense.length !== 0 ? (item.listExpense.map((ex) => (
+                                                    (ex.expense) ? (<p key={ex.expense._id}>{ex.expense.category}</p>) : ("loading")
+                                                ))) : ("loading")}
                                             </td>
                                             <td>{item.expense}</td>
                                             <td>
@@ -64,7 +64,7 @@ const Share_Expense_Table = () => {
                                             </td>
                                         </tr>
                                     ))
-                                ):(<p>Loading</p>)}
+                                ) : (<p>Loading</p>)}
                             </tbody>
                         </table>
                         <div class="clearfix">
