@@ -8,6 +8,7 @@ import Expense from './components/Expense';
 import Share_Expense from './components/Share_Expense';
 import User from './components/User';
 import Profile_DashBoard from './components/Profile_Dashboard';
+import Tax from './components/Tax';
 
 
 
@@ -22,7 +23,7 @@ function App() {
       <Route path='expense_tracking/user' element={<User/>}/>
       <Route path='expense_tracking/share_table' element={<Share_Expense/>}/>
       <Route path='expense_tracking/profile' element={<Profile_DashBoard/>}/>
-
+      <Route path='expense_tracking/tax' element={<Tax/>}/>
     </Routes>
      </BrowserRouter>
      
