@@ -72,7 +72,7 @@ const Signup = ({ onRotate }) => {
 
                 sessionStorage.setItem("user", JSON.stringify(user));
                 // showAddSuccessfully();
-                navigate("/expense_tracking/home");
+                navigate("/expense_tracking/");
             }
         } catch (error) {
             // showAddFail();
