@@ -21,30 +21,33 @@ const Income_DashBoard = () => {
 
     const ListofUser = JSON.parse(list);
     useEffect(() => {
-        if (role == 1) {
-            const fetchData = async () => {
-                try {
-                    const response = await axios.get(baseURL, {
-                        headers: {
-                            "Authorization": `Bearer ${JSON.parse(token)}`
+        const fetchIncomeData = async () => {
+
+            if (role == 1) {
+                const fetchData = async () => {
+                    try {
+                        const response = await axios.get(baseURL, {
+                            headers: {
+                                "Authorization": `Bearer ${JSON.parse(token)}`
+                            }
+                        })
+                        console.log("income", response.data);
+                        if (response.data) {
+                            setIncome(response.data.income);
                         }
-                    })
-                    console.log("income", response.data);
-                    if (response.data) {
-                        setIncome(response.data.income);
+                    } catch (error) {
+                        console.log(error);
+
                     }
-                } catch (error) {
-                    console.log(error);
-
                 }
+                fetchData();
             }
-            fetchData();
+            else {
+                setIncome(ListofUser);
+            }
         }
-        else {
-            setIncome(ListofUser);
-
-        }
-    }, [])
+        fetchIncomeData();
+        }, [])
     //  console.log("select",select);
 
     const handleDelete = async (event) => {
@@ -86,7 +89,7 @@ const Income_DashBoard = () => {
     };
     console.log("mulple", selectedIncome);
     const handleDeleteMultiple = async () => {
-       // event.preventDefault();
+        // event.preventDefault();
         console.log("kkk");
 
         let deleteMulti;
@@ -130,8 +133,8 @@ const Income_DashBoard = () => {
 
 
     const handleEdit = async (event) => {
-      event.preventDefault();
-        let newEdit = { 
+        event.preventDefault();
+        let newEdit = {
             nameIncome: event.target.nameIncome.value,
             amount: event.target.amount.value,
             idIncome: select._id
@@ -160,7 +163,7 @@ const Income_DashBoard = () => {
                     return i;
                 });
 
-                console.log("update ",updatedIncome);
+                console.log("update ", updatedIncome);
                 setIncome(updatedIncome);
                 handleCancle();
             }
@@ -289,7 +292,7 @@ const Income_DashBoard = () => {
                                                 <td>{item.month}</td>
                                                 <td>{item.Year}</td>
                                                 <td>
-                                                   
+
                                                     <a className="edit" onClick={() => { handleEditPopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                     <a className="delete" onClick={() => { handleDeletePopUp(item) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                                 </td>
@@ -422,7 +425,7 @@ const Income_DashBoard = () => {
                                     <button type="button" className="close" data-dismiss="modal" >&times;</button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Are you sure you want to delete <span><b>{(role==1)?(select.nameIncome):(select.nameIncome)}</b></span> ?</p>
+                                    <p>Are you sure you want to delete <span><b>{(role == 1) ? (select.nameIncome) : (select.nameIncome)}</b></span> ?</p>
                                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
                                 <div className="modal-footer">

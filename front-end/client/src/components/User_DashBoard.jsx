@@ -50,7 +50,7 @@ const User_DashBoard = () => {
 
     //edit User
 
-    const handleEditUser = async (event) => {
+    const handleEditUser = async () => {
          //event.preventDefault();
         try {
             const baseURL = "http://localhost:5000/editUser";

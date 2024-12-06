@@ -16,11 +16,66 @@ const Expense_DashBoard = () => {
     const list = sessionStorage.getItem("listExpense");
     const username = sessionStorage.getItem("username");
     const userID = sessionStorage.getItem("userID");
-
     // const ListofUser = JSON.parse(list);
     console.log(role);
-    //console.log(expense);
+    console.log("expense ", expense);
     //console.log("check selected"+ selectedExpense);
+
+    useEffect(() => {
+        const fetchExpense = async () => {
+            if (role == 1) {
+                const fetchData = async () => {
+                    try {
+                        const response = await axios.get(baseURL, {
+                            headers: {
+                                "Authorization": `Bearer ${JSON.parse(token)}`
+                            }
+                        })
+                        console.log("expense", response.data);
+
+                        if (response.data) {
+                            setExpense(response.data);
+                        }
+                    } catch (error) {
+                        console.log(error);
+
+                    }
+                }
+                fetchData();
+            } else {
+                const fetchExpenseData = async () => {
+                    const inforURL = "http://localhost:5000/getInfor";
+                    const currentID = sessionStorage.getItem("userID");
+                    if (!currentID || !token) {
+                        console.error("User ID or token is missing in sessionStorage.");
+                        return;
+                    } else {
+                        console.log("current Id: ", currentID);
+                    }
+
+                    try {
+                        const response = await axios.get(`${inforURL}/${currentID}`, {
+                            headers: {
+                                "Authorization": `Bearer ${JSON.parse(token)}`
+                            }
+                        });
+
+                        if (response.status === 200) {
+                            // console.log("get infor", response.data);
+                            setExpense(response.data.listExpense);
+                            sessionStorage.setItem("listExpense", response.data.listExpense);
+                        } else {
+                            console.error("No income data found or error response:", response);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching income data:", error);
+                    }
+                }
+                fetchExpenseData();
+            }
+        }
+        fetchExpense();
+        }, [])
     const handleAddPopUp = () => {
         setAdd(true);
     };
@@ -39,59 +94,6 @@ const Expense_DashBoard = () => {
         setDeleteP(false);
     }
 
-    useEffect(() => {
-        if (role == 1) {
-            const fetchData = async () => {
-                try {
-                    const response = await axios.get(baseURL, {
-                        headers: {
-                            "Authorization": `Bearer ${JSON.parse(token)}`
-                        }
-                    })
-                    console.log("expense", response.data);
-
-                    if (response.data) {
-                        setExpense(response.data);
-                    }
-                } catch (error) {
-                    console.log(error);
-
-                }
-            }
-            fetchData();
-        } else {
-            const fetchExpenseData = async () => {
-                const inforURL = "http://localhost:5000/getInfor";
-                const currentID = sessionStorage.getItem("userID");
-                if (!currentID || !token) {
-                    console.error("User ID or token is missing in sessionStorage.");
-                    return;
-                } else {
-                    console.log("current Id: ", currentID);
-                }
-
-                try {
-                    const response = await axios.get(`${inforURL}/${currentID}`, {
-                        headers: {
-                            "Authorization": `Bearer ${JSON.parse(token)}`
-                        }
-                    });
-
-                    if (response.status === 200) {
-                        // console.log("get infor", response.data);
-                        setExpense(response.data.listExpense);
-                        sessionStorage.setItem("listExpense", response.data.listExpense);
-                    } else {
-                        console.error("No income data found or error response:", response);
-                    }
-                } catch (error) {
-                    console.error("Error fetching income data:", error);
-                }
-            }
-            fetchExpenseData();
-        }
-
-    }, [])
     const handleCheckBox = (item) => {
         setSelectedExpense((prevSelected) => {
             const isItemSelected = prevSelected.some((selectedItem) => selectedItem._id === item._id);
@@ -101,7 +103,7 @@ const Expense_DashBoard = () => {
         });
     }
     const handleDeleteMultiple = async () => {
-       // event.preventDefault();
+        // event.preventDefault();
         console.log("run multi expense ", selectedExpense);
         let deleteMulti;
         if (role == 1) {
@@ -161,8 +163,10 @@ const Expense_DashBoard = () => {
             })
             if (response.data) {
                 console.log("Expense added successfully:", response.data);
-                handleCancle(); // Gọi hàm hủy hoặc reset form
+                handleCancle();
+
             }
+
         } catch (error) {
             console.log(error);
         }
@@ -205,8 +209,8 @@ const Expense_DashBoard = () => {
         setSelectAll(!selectAll);
     };
 
-    const handleDelete = async () => {
-        // event.preventDefault();
+    const handleDelete = async (event) => {
+        //event.preventDefault();
         console.log("Run delete");
         console.log(select);
         console.log(`${baseURL}/${select._id}`);
@@ -243,7 +247,7 @@ const Expense_DashBoard = () => {
                                     <h2>Manage <b>Expense</b></h2>
                                 </div>
                                 <div className="col-xs-6">
-                                    <button className="btn btn-success" data-toggle="modal" onClick={(event) => { handleAddPopUp(event) }}><i className="material-icons">&#xE147;</i> <span>Add New Expense</span></button>
+                                    <button className="btn btn-success" data-toggle="modal" onClick={handleAddPopUp}><i className="material-icons">&#xE147;</i> <span>Add New Expense</span></button>
                                     {/* <button className="btn btn-danger" data-toggle="modal" onClick={handleDeleteMultiple}><i className="material-icons">&#xE15C;</i> <span>Delete</span></button> */}
                                 </div>
                             </div>
@@ -296,32 +300,31 @@ const Expense_DashBoard = () => {
                                 </tbody>
                             ) : (
                                 <tbody>
-                                    {expense &&
-                                        expense.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>
-                                                    <span className="custom-checkbox">
-                                                        <input type="checkbox" id="checkbox1" className="options[]" value="1"
-                                                            checked={selectAll || selectedExpense.includes(item.expense)}
-                                                            onChange={() => { handleCheckBox(item.expense) }} />
-                                                        <label htmlFor="checkbox1"></label>
-                                                    </span>
-                                                </td>
-                                                <td>{index + 1}</td>
-                                                <td>{item.expense.category}</td>
-                                                <td>{item.expense.amount}$</td>
+                                    {expense && expense.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                <span className="custom-checkbox">
+                                                    <input type="checkbox" id="checkbox1" className="options[]" value="1"
+                                                        checked={selectAll || selectedExpense.includes(item.expense)}
+                                                        onChange={() => { handleCheckBox(item.expense) }} />
+                                                    <label htmlFor="checkbox1"></label>
+                                                </span>
+                                            </td>
+                                            <td>{index + 1}</td>
+                                            <td>{item.expense.category}</td>
+                                            <td>{item.expense.amount}$</td>
 
-                                                <td>{username}</td>
-                                                <td>{item.expense.month}</td>
-                                                <td>{item.expense.year}</td>
+                                            <td>{username}</td>
+                                            <td>{item.expense.month}</td>
+                                            <td>{item.expense.year}</td>
 
-                                                <td>
-                                                    <a className="edit" onClick={() => { handleEditPopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                                    <a className="delete" onClick={() => { handleDeletePopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                        )
-                                        )}
+                                            <td>
+                                                <a className="edit" onClick={() => { handleEditPopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                <a className="delete" onClick={() => { handleDeletePopUp(item.expense) }}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            </td>
+                                        </tr>
+                                    )
+                                    )}
                                 </tbody>
                             )}
 
